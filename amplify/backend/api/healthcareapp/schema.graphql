@@ -1,0 +1,94 @@
+# This "input" configures a global authorization rule to enable public access to
+# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
+input AMPLIFY {
+  globalAuthRule: AuthRule = { allow: public }
+} # FOR TESTING ONLY!
+type User @model {
+  id: ID!
+  name: String!
+  surname: String!
+  email: String!
+  password: String!
+  address: String!
+  postal_code: String!
+  id_number: String!
+  cell_phone_no: String!
+  access_type: String!
+  notification: [Notification] @hasMany(indexName: "byUserID", fields: ["id"])
+  medicalReport: [MedicalReport] @hasMany(indexName: "byUserID", fields: ["id"])
+  biometricData: [BiometricData] @hasMany(indexName: "byUserID", fields: ["id"])
+  governmentGrant: GovernmentGrant @hasOne(fields: ["id"])
+}
+
+type Notification @model {
+  id: ID!
+  message: String!
+  user_id: ID! @index(name: "byUserID")
+}
+
+type BiometricData @model {
+  id: ID!
+  data: String!
+  status: String!
+  user_id: ID! @index(name: "byUserID")
+}
+
+type MedicalReport @model {
+  id: ID!
+  report_text: String
+  doctor_name: String
+  appointment_date: AWSDateTime
+  medical_report_status: String!
+  user_id: ID! @index(name: "byUserID")
+  hospital: [Hospital] @hasMany(indexName: "byMedicalReportID", fields: ["id"])
+}
+
+type MedicalHistory @model {
+  id: ID!
+  condition: String
+  allergies: String
+  surgeries: String
+  medications: String
+  user_id: ID! @index(name: "byUserID")
+}
+
+type Hospital @model {
+  id: ID!
+  hospital_name: String!
+  address: String!
+  postal_code: String!
+  medical_report_id: ID! @index(name: "byMedicalReportID")
+  doctor: [Doctor] @hasMany(indexName: "byDoctorID", fields: ["id"])
+}
+
+type Doctor @model {
+  id: ID!
+  first_name: String
+  last_name: String
+  specialization: String
+  contactInformation: ContactInfo
+  cell_no: String
+  hospital_id: ID! @index(name: "byDoctorID")
+}
+
+type ContactInfo {
+  email: String
+  phone: String
+}
+
+type GovernmentGrant @model {
+  id: ID!
+  grantName: String!
+  amount: Float
+  applicationProcess: String
+  user_id: ID! @index(name: "byUserID")
+}
+
+# 
+home affairs
+
+
+
+
+
+

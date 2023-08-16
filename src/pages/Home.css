@@ -1,0 +1,111 @@
+.main-section{
+    
+    height: 500px ;
+    background: url('../../public/assets/pexels-karolina-grabowska-4021769.jpg') ;
+    background-attachment: fixed !important;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-size: 100% !important;
+    padding: 5%;
+}
+
+.main-title{
+    padding-top: 80px !important;
+    text-align: left;
+    font-size: 60px;
+    margin: 0 !important;
+        font-family: 'Comfortaa', cursive;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.main-title-sub{
+    text-align: left;
+    font-size: 60px;
+     margin: 0 !important;
+         font-family: 'Comfortaa', cursive;
+    font-family: 'Montserrat', sans-serif;
+
+}
+
+.btn-register{
+    margin-left: 5px;
+    margin-top: 2%;
+    height: 40px;
+        font-family: 'Comfortaa', cursive;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.about-section{
+    padding: 5%;
+        font-family: 'Comfortaa', cursive;
+    font-family: 'Montserrat', sans-serif;
+    font-family: 'Montserrat', sans-serif;
+
+}
+
+.text-data{
+    text-align: justify !important;
+        font-family: 'Comfortaa', cursive;
+    font-family: 'Montserrat', sans-serif;
+}
+.main-section{
+    padding: 0 !important;
+}
+
+.sub-m{
+    background: rgba(1, 68, 107, 0.836);
+    min-height: inherit;
+    padding: 5% !important;
+    min-height: 100vh;
+}
+
+.side_img{
+    border-radius: 20px;
+}
+
+@media (max-width: 576px) { 
+
+    .main-section{
+        background: url('../../public/assets/mobile-d.png');
+        background-attachment: fixed !important;
+        text-align: center;
+        overflow: hidden;
+        background-repeat: no-repeat;
+        padding: 0 !important;
+        margin: 0 !important;
+        max-height: 500px !important;
+    }
+
+    .main-title{
+        padding-top:100px !important;
+        text-align: center;
+        font-size: 50px;
+       
+    }
+
+    .main-title-sub{
+        text-align: center;
+        font-size: 50px;
+        margin-bottom: 3% !important;
+       
+
+    }
+
+    .about-sub{
+        padding: 7% !important;
+    }
+
+    .sub-m{
+        background-color: rgba(1, 68, 107, 0.836);
+        padding: 4% !important;
+        margin: 0 !important;
+        height: 100vh !important;
+        overflow: hidden;
+    }
+    .text-data{
+        text-align: left !important;
+        padding: 5%;
+        font-family: 'Comfortaa', cursive;
+        font-family: 'Montserrat', sans-serif;
+    }
+}
