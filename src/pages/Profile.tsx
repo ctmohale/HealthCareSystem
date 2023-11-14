@@ -17,12 +17,26 @@ import Footer from "../components/Footer";
 import { GraphQLQuery } from "@aws-amplify/api";
 import * as mutations from "../graphql/mutations";
 import { useContext, useEffect, useRef, useState } from "react";
-import { FaUserPen } from "react-icons/fa6";
+import { FaBriefcaseMedical, FaUserPen, FaUsers } from "react-icons/fa6";
 import Swal from "sweetalert2";
-import { UpdateUserInput, UpdateUserMutation } from "../API";
+import {
+  DeleteUserInput,
+  DeleteUserMutation,
+  UpdateUserInput,
+  UpdateUserMutation,
+} from "../API";
 import { API } from "aws-amplify";
 import LoginData from "../context/login";
-import { AiOutlineUser } from "react-icons/ai";
+import { AiOutlineHome, AiOutlineUser } from "react-icons/ai";
+import { SignInHeader } from "../components/login/SignInHeader";
+import { SignInFooter } from "../components/login/SignInFooter";
+import { SignUpHeader } from "../components/login/SignUpHeader";
+import { PasswordResetHeader } from "../components/login/PasswordResetHeader";
+import { withAuthenticator } from "@aws-amplify/ui-react";
+import "@aws-amplify/ui-react/styles.css";
+import { Amplify, Auth } from "aws-amplify";
+import { RiGovernmentFill } from "react-icons/ri";
+import { GiReceiveMoney } from "react-icons/gi";
 
 const Profile: React.FC = () => {
   //User details
@@ -61,6 +75,37 @@ const Profile: React.FC = () => {
     }
   }, [loginUser]);
 
+  //
+  async function deleteUserAccount() {
+    // Prompt the user for confirmation
+    const confirmDelete = window.confirm(
+      "Are you sure you want to cancel your account?"
+    );
+
+    if (!confirmDelete) {
+      return; // If the user cancels, do nothing
+    }
+
+    const delete_data: DeleteUserInput = {
+      id: loginUser.id,
+    };
+
+    const delete_grant = await API.graphql<GraphQLQuery<DeleteUserMutation>>({
+      query: mutations.deleteUser,
+      variables: { input: delete_data },
+    });
+
+    if (delete_grant) {
+      localStorage.removeItem("user");
+      setLoginUser(null);
+      window.location.href = "/";
+      Toast.fire({
+        icon: "success",
+        title: "Account deleted successfully!",
+      });
+    }
+  }
+
   async function updateUser() {
     //
     if (
@@ -74,6 +119,7 @@ const Profile: React.FC = () => {
       const userDetails: UpdateUserInput = {
         id: loginUser.id,
         name: name,
+        surname: surname,
         password: password,
         address: address,
         postal_code: postal,
@@ -171,7 +217,62 @@ const Profile: React.FC = () => {
           <h2 className="about-sub text-secondary pb-5">
             <AiOutlineUser size="30" /> User profile section
           </h2>
+          {loginUser && loginUser.access_type === "admin" && (
+            <ul className="nav nav-tabs">
+              <li className="nav-item">
+                <IonButton
+                  fill="clear"
+                  className="nav-link text-secondary"
+                  aria-current="page"
+                  routerLink="/Dashboad"
+                >
+                  <AiOutlineHome /> Dashboard
+                </IonButton>
+              </li>
+              <li className="nav-item">
+                <IonButton
+                  fill="clear"
+                  className="nav-link active text-secondary"
+                  aria-current="page"
+                  routerLink="/users"
+                >
+                  <FaUsers /> Users
+                </IonButton>
+              </li>
+              <li className="nav-item">
+                <IonButton
+                  fill="clear"
+                  className="nav-link text-secondary"
+                  aria-current="page"
+                  routerLink="/adminmedical"
+                >
+                  <FaBriefcaseMedical /> Medical
+                </IonButton>
+              </li>
+              <li className="nav-item">
+                <IonButton
+                  fill="clear"
+                  className="nav-link text-secondary"
+                  aria-current="page"
+                  href="#"
+                >
+                  <RiGovernmentFill /> Department
+                </IonButton>
+              </li>
+              <li className="nav-item">
+                <IonButton
+                  fill="clear"
+                  className="nav-link text-secondary"
+                  aria-current="page"
+                  routerLink="/"
+                >
+                  <GiReceiveMoney /> Grant
+                </IonButton>
+              </li>
+            </ul>
+          )}
 
+          <br />
           <>
             <div className="row text-center">
               <div className="col-sm-6 mb-3 mb-sm-0">
@@ -266,11 +367,21 @@ const Profile: React.FC = () => {
                   Update Profile
                 </IonButton>
               </div>
+
               <div className="col-sm-6 text-secondary p-5">
                 <img
                   src="./assets/undraw_Female_avatar_efig-removebg-preview.png"
                   width="70%"
                 />
+                {loginUser && loginUser.access_type === "user" && (
+                  <IonButton
+                    onClick={() => deleteUserAccount()}
+                    shape="round"
+                    color="danger"
+                  >
+                    Cancel User Account
+                  </IonButton>
+                )}
               </div>
             </div>
           </>

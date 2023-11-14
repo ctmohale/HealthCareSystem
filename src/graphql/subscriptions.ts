@@ -15,34 +15,7 @@ export const onCreateUser = /* GraphQL */ `
       id_number
       cell_phone_no
       access_type
-      notification {
-        items {
-          id
-          message
-          user_id
-          createdAt
-          updatedAt
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      medicalReport {
-        items {
-          id
-          report_text
-          doctor_name
-          appointment_date
-          medical_report_status
-          user_id
-          createdAt
-          updatedAt
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      biometricData {
+      biometricdata {
         items {
           id
           data
@@ -55,18 +28,29 @@ export const onCreateUser = /* GraphQL */ `
         nextToken
         __typename
       }
-      governmentGrant {
-        id
-        grantName
-        description
-        amount
-        startDate
-        endDate
-        applicationDeadline
-        eligibilityRequirements
-        applicationProcess
-        createdAt
-        updatedAt
+      patient {
+        items {
+          id
+          user_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      appointment {
+        items {
+          id
+          appointmentDate
+          status
+          notes
+          user_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
         __typename
       }
       createdAt
@@ -88,34 +72,7 @@ export const onUpdateUser = /* GraphQL */ `
       id_number
       cell_phone_no
       access_type
-      notification {
-        items {
-          id
-          message
-          user_id
-          createdAt
-          updatedAt
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      medicalReport {
-        items {
-          id
-          report_text
-          doctor_name
-          appointment_date
-          medical_report_status
-          user_id
-          createdAt
-          updatedAt
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      biometricData {
+      biometricdata {
         items {
           id
           data
@@ -128,18 +85,29 @@ export const onUpdateUser = /* GraphQL */ `
         nextToken
         __typename
       }
-      governmentGrant {
-        id
-        grantName
-        description
-        amount
-        startDate
-        endDate
-        applicationDeadline
-        eligibilityRequirements
-        applicationProcess
-        createdAt
-        updatedAt
+      patient {
+        items {
+          id
+          user_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      appointment {
+        items {
+          id
+          appointmentDate
+          status
+          notes
+          user_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
         __typename
       }
       createdAt
@@ -161,34 +129,7 @@ export const onDeleteUser = /* GraphQL */ `
       id_number
       cell_phone_no
       access_type
-      notification {
-        items {
-          id
-          message
-          user_id
-          createdAt
-          updatedAt
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      medicalReport {
-        items {
-          id
-          report_text
-          doctor_name
-          appointment_date
-          medical_report_status
-          user_id
-          createdAt
-          updatedAt
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      biometricData {
+      biometricdata {
         items {
           id
           data
@@ -201,62 +142,31 @@ export const onDeleteUser = /* GraphQL */ `
         nextToken
         __typename
       }
-      governmentGrant {
-        id
-        grantName
-        description
-        amount
-        startDate
-        endDate
-        applicationDeadline
-        eligibilityRequirements
-        applicationProcess
-        createdAt
-        updatedAt
+      patient {
+        items {
+          id
+          user_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
         __typename
       }
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const onCreateNotification = /* GraphQL */ `
-  subscription OnCreateNotification(
-    $filter: ModelSubscriptionNotificationFilterInput
-  ) {
-    onCreateNotification(filter: $filter) {
-      id
-      message
-      user_id
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const onUpdateNotification = /* GraphQL */ `
-  subscription OnUpdateNotification(
-    $filter: ModelSubscriptionNotificationFilterInput
-  ) {
-    onUpdateNotification(filter: $filter) {
-      id
-      message
-      user_id
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const onDeleteNotification = /* GraphQL */ `
-  subscription OnDeleteNotification(
-    $filter: ModelSubscriptionNotificationFilterInput
-  ) {
-    onDeleteNotification(filter: $filter) {
-      id
-      message
-      user_id
+      appointment {
+        items {
+          id
+          appointmentDate
+          status
+          notes
+          user_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
       createdAt
       updatedAt
       __typename
@@ -308,24 +218,179 @@ export const onDeleteBiometricData = /* GraphQL */ `
     }
   }
 `;
-export const onCreateMedicalReport = /* GraphQL */ `
-  subscription OnCreateMedicalReport(
-    $filter: ModelSubscriptionMedicalReportFilterInput
+export const onCreateAppointment = /* GraphQL */ `
+  subscription OnCreateAppointment(
+    $filter: ModelSubscriptionAppointmentFilterInput
   ) {
-    onCreateMedicalReport(filter: $filter) {
+    onCreateAppointment(filter: $filter) {
+      id
+      appointmentDate
+      status
+      notes
+      user_id
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onUpdateAppointment = /* GraphQL */ `
+  subscription OnUpdateAppointment(
+    $filter: ModelSubscriptionAppointmentFilterInput
+  ) {
+    onUpdateAppointment(filter: $filter) {
+      id
+      appointmentDate
+      status
+      notes
+      user_id
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onDeleteAppointment = /* GraphQL */ `
+  subscription OnDeleteAppointment(
+    $filter: ModelSubscriptionAppointmentFilterInput
+  ) {
+    onDeleteAppointment(filter: $filter) {
+      id
+      appointmentDate
+      status
+      notes
+      user_id
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onCreateAdmin = /* GraphQL */ `
+  subscription OnCreateAdmin($filter: ModelSubscriptionAdminFilterInput) {
+    onCreateAdmin(filter: $filter) {
+      id
+      name
+      surname
+      email
+      password
+      access_type
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onUpdateAdmin = /* GraphQL */ `
+  subscription OnUpdateAdmin($filter: ModelSubscriptionAdminFilterInput) {
+    onUpdateAdmin(filter: $filter) {
+      id
+      name
+      surname
+      email
+      password
+      access_type
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onDeleteAdmin = /* GraphQL */ `
+  subscription OnDeleteAdmin($filter: ModelSubscriptionAdminFilterInput) {
+    onDeleteAdmin(filter: $filter) {
+      id
+      name
+      surname
+      email
+      password
+      access_type
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onCreateMedicalRecords = /* GraphQL */ `
+  subscription OnCreateMedicalRecords(
+    $filter: ModelSubscriptionMedicalRecordsFilterInput
+  ) {
+    onCreateMedicalRecords(filter: $filter) {
       id
       report_text
       doctor_name
       appointment_date
       medical_report_status
+      patient_id
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onUpdateMedicalRecords = /* GraphQL */ `
+  subscription OnUpdateMedicalRecords(
+    $filter: ModelSubscriptionMedicalRecordsFilterInput
+  ) {
+    onUpdateMedicalRecords(filter: $filter) {
+      id
+      report_text
+      doctor_name
+      appointment_date
+      medical_report_status
+      patient_id
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onDeleteMedicalRecords = /* GraphQL */ `
+  subscription OnDeleteMedicalRecords(
+    $filter: ModelSubscriptionMedicalRecordsFilterInput
+  ) {
+    onDeleteMedicalRecords(filter: $filter) {
+      id
+      report_text
+      doctor_name
+      appointment_date
+      medical_report_status
+      patient_id
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onCreatePatient = /* GraphQL */ `
+  subscription OnCreatePatient($filter: ModelSubscriptionPatientFilterInput) {
+    onCreatePatient(filter: $filter) {
+      id
       user_id
-      hospital {
+      prescription {
         items {
           id
-          hospital_name
-          address
-          postal_code
-          medical_report_id
+          patient_name
+          medication_name
+          dosage
+          doctor_name
+          patient_id
+          medical_doctor_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      medicalRecords {
+        items {
+          id
+          report_text
+          doctor_name
+          appointment_date
+          medical_report_status
+          patient_id
           createdAt
           updatedAt
           __typename
@@ -339,24 +404,35 @@ export const onCreateMedicalReport = /* GraphQL */ `
     }
   }
 `;
-export const onUpdateMedicalReport = /* GraphQL */ `
-  subscription OnUpdateMedicalReport(
-    $filter: ModelSubscriptionMedicalReportFilterInput
-  ) {
-    onUpdateMedicalReport(filter: $filter) {
+export const onUpdatePatient = /* GraphQL */ `
+  subscription OnUpdatePatient($filter: ModelSubscriptionPatientFilterInput) {
+    onUpdatePatient(filter: $filter) {
       id
-      report_text
-      doctor_name
-      appointment_date
-      medical_report_status
       user_id
-      hospital {
+      prescription {
         items {
           id
-          hospital_name
-          address
-          postal_code
-          medical_report_id
+          patient_name
+          medication_name
+          dosage
+          doctor_name
+          patient_id
+          medical_doctor_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      medicalRecords {
+        items {
+          id
+          report_text
+          doctor_name
+          appointment_date
+          medical_report_status
+          patient_id
           createdAt
           updatedAt
           __typename
@@ -370,24 +446,20 @@ export const onUpdateMedicalReport = /* GraphQL */ `
     }
   }
 `;
-export const onDeleteMedicalReport = /* GraphQL */ `
-  subscription OnDeleteMedicalReport(
-    $filter: ModelSubscriptionMedicalReportFilterInput
-  ) {
-    onDeleteMedicalReport(filter: $filter) {
+export const onDeletePatient = /* GraphQL */ `
+  subscription OnDeletePatient($filter: ModelSubscriptionPatientFilterInput) {
+    onDeletePatient(filter: $filter) {
       id
-      report_text
-      doctor_name
-      appointment_date
-      medical_report_status
       user_id
-      hospital {
+      prescription {
         items {
           id
-          hospital_name
-          address
-          postal_code
-          medical_report_id
+          patient_name
+          medication_name
+          dosage
+          doctor_name
+          patient_id
+          medical_doctor_id
           createdAt
           updatedAt
           __typename
@@ -395,57 +467,21 @@ export const onDeleteMedicalReport = /* GraphQL */ `
         nextToken
         __typename
       }
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const onCreateMedicalHistory = /* GraphQL */ `
-  subscription OnCreateMedicalHistory(
-    $filter: ModelSubscriptionMedicalHistoryFilterInput
-  ) {
-    onCreateMedicalHistory(filter: $filter) {
-      id
-      condition
-      allergies
-      surgeries
-      medications
-      user_id
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const onUpdateMedicalHistory = /* GraphQL */ `
-  subscription OnUpdateMedicalHistory(
-    $filter: ModelSubscriptionMedicalHistoryFilterInput
-  ) {
-    onUpdateMedicalHistory(filter: $filter) {
-      id
-      condition
-      allergies
-      surgeries
-      medications
-      user_id
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const onDeleteMedicalHistory = /* GraphQL */ `
-  subscription OnDeleteMedicalHistory(
-    $filter: ModelSubscriptionMedicalHistoryFilterInput
-  ) {
-    onDeleteMedicalHistory(filter: $filter) {
-      id
-      condition
-      allergies
-      surgeries
-      medications
-      user_id
+      medicalRecords {
+        items {
+          id
+          report_text
+          doctor_name
+          appointment_date
+          medical_report_status
+          patient_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
       createdAt
       updatedAt
       __typename
@@ -459,15 +495,45 @@ export const onCreateHospital = /* GraphQL */ `
       hospital_name
       address
       postal_code
-      medical_report_id
-      doctor {
+      medicalDoctor {
         items {
           id
           first_name
           last_name
           specialization
-          cell_no
+          email
+          password
+          phone
+          access_type
           hospital_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      departmentOfHomeAffairs {
+        items {
+          hospital_id
+          name
+          surname
+          address
+          postal_code
+          id_number
+          cell_phone_no
+          race
+          date_of_birth
+          gender
+          nationality
+          email
+          marital_status
+          citizenship_status
+          photo_url
+          notes
+          emergency_contact_name
+          emergency_contact_phone
+          id
           createdAt
           updatedAt
           __typename
@@ -488,15 +554,45 @@ export const onUpdateHospital = /* GraphQL */ `
       hospital_name
       address
       postal_code
-      medical_report_id
-      doctor {
+      medicalDoctor {
         items {
           id
           first_name
           last_name
           specialization
-          cell_no
+          email
+          password
+          phone
+          access_type
           hospital_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      departmentOfHomeAffairs {
+        items {
+          hospital_id
+          name
+          surname
+          address
+          postal_code
+          id_number
+          cell_phone_no
+          race
+          date_of_birth
+          gender
+          nationality
+          email
+          marital_status
+          citizenship_status
+          photo_url
+          notes
+          emergency_contact_name
+          emergency_contact_phone
+          id
           createdAt
           updatedAt
           __typename
@@ -517,15 +613,45 @@ export const onDeleteHospital = /* GraphQL */ `
       hospital_name
       address
       postal_code
-      medical_report_id
-      doctor {
+      medicalDoctor {
         items {
           id
           first_name
           last_name
           specialization
-          cell_no
+          email
+          password
+          phone
+          access_type
           hospital_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      departmentOfHomeAffairs {
+        items {
+          hospital_id
+          name
+          surname
+          address
+          postal_code
+          id_number
+          cell_phone_no
+          race
+          date_of_birth
+          gender
+          nationality
+          email
+          marital_status
+          citizenship_status
+          photo_url
+          notes
+          emergency_contact_name
+          emergency_contact_phone
+          id
           createdAt
           updatedAt
           __typename
@@ -539,120 +665,252 @@ export const onDeleteHospital = /* GraphQL */ `
     }
   }
 `;
-export const onCreateDoctor = /* GraphQL */ `
-  subscription OnCreateDoctor($filter: ModelSubscriptionDoctorFilterInput) {
-    onCreateDoctor(filter: $filter) {
+export const onCreatePrescription = /* GraphQL */ `
+  subscription OnCreatePrescription(
+    $filter: ModelSubscriptionPrescriptionFilterInput
+  ) {
+    onCreatePrescription(filter: $filter) {
+      id
+      patient_name
+      medication_name
+      dosage
+      doctor_name
+      patient_id
+      medical_doctor_id
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onUpdatePrescription = /* GraphQL */ `
+  subscription OnUpdatePrescription(
+    $filter: ModelSubscriptionPrescriptionFilterInput
+  ) {
+    onUpdatePrescription(filter: $filter) {
+      id
+      patient_name
+      medication_name
+      dosage
+      doctor_name
+      patient_id
+      medical_doctor_id
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onDeletePrescription = /* GraphQL */ `
+  subscription OnDeletePrescription(
+    $filter: ModelSubscriptionPrescriptionFilterInput
+  ) {
+    onDeletePrescription(filter: $filter) {
+      id
+      patient_name
+      medication_name
+      dosage
+      doctor_name
+      patient_id
+      medical_doctor_id
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onCreateMedicalDoctor = /* GraphQL */ `
+  subscription OnCreateMedicalDoctor(
+    $filter: ModelSubscriptionMedicalDoctorFilterInput
+  ) {
+    onCreateMedicalDoctor(filter: $filter) {
       id
       first_name
       last_name
       specialization
-      contactInformation {
-        email
-        phone
+      email
+      password
+      phone
+      access_type
+      hospital_id
+      prescription {
+        items {
+          id
+          patient_name
+          medication_name
+          dosage
+          doctor_name
+          patient_id
+          medical_doctor_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
         __typename
       }
-      cell_no
-      hospital_id
       createdAt
       updatedAt
       __typename
     }
   }
 `;
-export const onUpdateDoctor = /* GraphQL */ `
-  subscription OnUpdateDoctor($filter: ModelSubscriptionDoctorFilterInput) {
-    onUpdateDoctor(filter: $filter) {
+export const onUpdateMedicalDoctor = /* GraphQL */ `
+  subscription OnUpdateMedicalDoctor(
+    $filter: ModelSubscriptionMedicalDoctorFilterInput
+  ) {
+    onUpdateMedicalDoctor(filter: $filter) {
       id
       first_name
       last_name
       specialization
-      contactInformation {
-        email
-        phone
+      email
+      password
+      phone
+      access_type
+      hospital_id
+      prescription {
+        items {
+          id
+          patient_name
+          medication_name
+          dosage
+          doctor_name
+          patient_id
+          medical_doctor_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
         __typename
       }
-      cell_no
-      hospital_id
       createdAt
       updatedAt
       __typename
     }
   }
 `;
-export const onDeleteDoctor = /* GraphQL */ `
-  subscription OnDeleteDoctor($filter: ModelSubscriptionDoctorFilterInput) {
-    onDeleteDoctor(filter: $filter) {
+export const onDeleteMedicalDoctor = /* GraphQL */ `
+  subscription OnDeleteMedicalDoctor(
+    $filter: ModelSubscriptionMedicalDoctorFilterInput
+  ) {
+    onDeleteMedicalDoctor(filter: $filter) {
       id
       first_name
       last_name
       specialization
-      contactInformation {
-        email
-        phone
+      email
+      password
+      phone
+      access_type
+      hospital_id
+      prescription {
+        items {
+          id
+          patient_name
+          medication_name
+          dosage
+          doctor_name
+          patient_id
+          medical_doctor_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
         __typename
       }
-      cell_no
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onCreateDepartmentOfHomeAffairs = /* GraphQL */ `
+  subscription OnCreateDepartmentOfHomeAffairs(
+    $filter: ModelSubscriptionDepartmentOfHomeAffairsFilterInput
+  ) {
+    onCreateDepartmentOfHomeAffairs(filter: $filter) {
       hospital_id
+      name
+      surname
+      address
+      postal_code
+      id_number
+      cell_phone_no
+      race
+      date_of_birth
+      gender
+      nationality
+      email
+      marital_status
+      citizenship_status
+      photo_url
+      notes
+      emergency_contact_name
+      emergency_contact_phone
+      id
       createdAt
       updatedAt
       __typename
     }
   }
 `;
-export const onCreateGovernmentGrant = /* GraphQL */ `
-  subscription OnCreateGovernmentGrant(
-    $filter: ModelSubscriptionGovernmentGrantFilterInput
+export const onUpdateDepartmentOfHomeAffairs = /* GraphQL */ `
+  subscription OnUpdateDepartmentOfHomeAffairs(
+    $filter: ModelSubscriptionDepartmentOfHomeAffairsFilterInput
   ) {
-    onCreateGovernmentGrant(filter: $filter) {
+    onUpdateDepartmentOfHomeAffairs(filter: $filter) {
+      hospital_id
+      name
+      surname
+      address
+      postal_code
+      id_number
+      cell_phone_no
+      race
+      date_of_birth
+      gender
+      nationality
+      email
+      marital_status
+      citizenship_status
+      photo_url
+      notes
+      emergency_contact_name
+      emergency_contact_phone
       id
-      grantName
-      description
-      amount
-      startDate
-      endDate
-      applicationDeadline
-      eligibilityRequirements
-      applicationProcess
       createdAt
       updatedAt
       __typename
     }
   }
 `;
-export const onUpdateGovernmentGrant = /* GraphQL */ `
-  subscription OnUpdateGovernmentGrant(
-    $filter: ModelSubscriptionGovernmentGrantFilterInput
+export const onDeleteDepartmentOfHomeAffairs = /* GraphQL */ `
+  subscription OnDeleteDepartmentOfHomeAffairs(
+    $filter: ModelSubscriptionDepartmentOfHomeAffairsFilterInput
   ) {
-    onUpdateGovernmentGrant(filter: $filter) {
+    onDeleteDepartmentOfHomeAffairs(filter: $filter) {
+      hospital_id
+      name
+      surname
+      address
+      postal_code
+      id_number
+      cell_phone_no
+      race
+      date_of_birth
+      gender
+      nationality
+      email
+      marital_status
+      citizenship_status
+      photo_url
+      notes
+      emergency_contact_name
+      emergency_contact_phone
       id
-      grantName
-      description
-      amount
-      startDate
-      endDate
-      applicationDeadline
-      eligibilityRequirements
-      applicationProcess
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const onDeleteGovernmentGrant = /* GraphQL */ `
-  subscription OnDeleteGovernmentGrant(
-    $filter: ModelSubscriptionGovernmentGrantFilterInput
-  ) {
-    onDeleteGovernmentGrant(filter: $filter) {
-      id
-      grantName
-      description
-      amount
-      startDate
-      endDate
-      applicationDeadline
-      eligibilityRequirements
-      applicationProcess
       createdAt
       updatedAt
       __typename

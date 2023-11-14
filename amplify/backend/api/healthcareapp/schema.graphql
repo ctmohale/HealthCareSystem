@@ -1,4 +1,3 @@
-# This "input" configures a global authorization rule to enable public access to
 # all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
 input AMPLIFY {
   globalAuthRule: AuthRule = { allow: public }
@@ -14,42 +13,51 @@ type User @model {
   id_number: String!
   cell_phone_no: String!
   access_type: String!
-  notification: [Notification] @hasMany(indexName: "byUserID", fields: ["id"])
-  medicalReport: [MedicalReport] @hasMany(indexName: "byUserID", fields: ["id"])
-  biometricData: [BiometricData] @hasMany(indexName: "byUserID", fields: ["id"])
-  governmentGrant: GovernmentGrant @hasOne(fields: ["id"])
-}
-
-type Notification @model {
-  id: ID!
-  message: String!
-  user_id: ID! @index(name: "byUserID")
+  biometricdata: [BiometricData] @hasMany(indexName: "byUserID", fields: ["id"])
+  patient: [Patient] @hasMany(indexName: "byUserID", fields: ["id"])
+  appointment: [Appointment] @hasMany(indexName: "byUserID", fields: ["id"])
 }
 
 type BiometricData @model {
   id: ID!
   data: String!
   status: String!
-  user_id: ID! @index(name: "byUserID")
+  user_id: ID @index(name: "byUserID")
 }
 
-type MedicalReport @model {
+type Appointment @model {
   id: ID!
-  report_text: String
-  doctor_name: String
-  appointment_date: AWSDateTime
+  appointmentDate: String!
+  status: String!
+  notes: String
+  user_id: ID @index(name: "byUserID")
+}
+
+type Admin @model {
+  id: ID!
+  name: String!
+  surname: String!
+  email: String!
+  password: String!
+  access_type: String
+}
+
+type MedicalRecords @model {
+  id: ID!
+  report_text: String!
+  doctor_name: String!
+  appointment_date: String!
   medical_report_status: String!
-  user_id: ID! @index(name: "byUserID")
-  hospital: [Hospital] @hasMany(indexName: "byMedicalReportID", fields: ["id"])
+  patient_id: ID @index(name: "byPatientID")
 }
 
-type MedicalHistory @model {
+type Patient @model {
   id: ID!
-  condition: String
-  allergies: String
-  surgeries: String
-  medications: String
-  user_id: ID! @index(name: "byUserID")
+  user_id: ID @index(name: "byUserID")
+  prescription: [Prescription]
+    @hasMany(indexName: "byPatientID", fields: ["id"])
+  medicalRecords: [MedicalRecords]
+    @hasMany(indexName: "byPatientID", fields: ["id"])
 }
 
 type Hospital @model {
@@ -57,38 +65,53 @@ type Hospital @model {
   hospital_name: String!
   address: String!
   postal_code: String!
-  medical_report_id: ID! @index(name: "byMedicalReportID")
-  doctor: [Doctor] @hasMany(indexName: "byDoctorID", fields: ["id"])
+  medicalDoctor: [MedicalDoctor]
+    @hasMany(indexName: "byHospitalID", fields: ["id"])
+  departmentOfHomeAffairs: [DepartmentOfHomeAffairs]
+    @hasMany(indexName: "byHospitalID", fields: ["id"])
 }
 
-type Doctor @model {
+type Prescription @model {
   id: ID!
-  first_name: String
-  last_name: String
-  specialization: String
-  contactInformation: ContactInfo
-  cell_no: String
-  hospital_id: ID! @index(name: "byDoctorID")
+  patient_name: String!
+  medication_name: String!
+  dosage: String!
+  doctor_name: String!
+  patient_id: ID @index(name: "byPatientID")
+  medical_doctor_id: ID @index(name: "MedicalDoctorID")
 }
 
-type ContactInfo {
+type MedicalDoctor @model {
+  id: ID!
+  first_name: String!
+  last_name: String!
+  specialization: String!
+  email: String!
+  password: String!
+  phone: String!
+  access_type: String
+  hospital_id: ID @index(name: "byHospitalID")
+  prescription: [Prescription]
+    @hasMany(indexName: "MedicalDoctorID", fields: ["id"])
+}
+
+type DepartmentOfHomeAffairs @model {
+  hospital_id: ID @index(name: "byHospitalID")
+  name: String!
+  surname: String!
+  address: String!
+  postal_code: String!
+  id_number: String!
+  cell_phone_no: String
+  race: String!
+  date_of_birth: String
+  gender: String
+  nationality: String
   email: String
-  phone: String
+  marital_status: String
+  citizenship_status: String
+  photo_url: String
+  notes: String
+  emergency_contact_name: String
+  emergency_contact_phone: String
 }
-
-type GovernmentGrant @model {
-  id: ID!
-  grantName: String!
-  amount: Float
-  applicationProcess: String
-  user_id: ID! @index(name: "byUserID")
-}
-
-# 
-home affairs
-
-
-
-
-
-

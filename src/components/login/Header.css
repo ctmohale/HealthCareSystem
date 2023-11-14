@@ -1,0 +1,15 @@
+.main_logo {
+  width: 140px !important;
+  height: 130px !important;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.amplify-button {
+  background: rgb(2, 124, 133);
+}
+
+.amplify-tabs {
+  border-top: rgb(2, 124, 133) !important;
+}

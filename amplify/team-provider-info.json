@@ -12,8 +12,14 @@
       "AmplifyAppId": "d3w5cpm7afo3wt"
     },
     "categories": {
+      "auth": {
+        "healthcareappa67dd887": {}
+      },
       "api": {
         "healthcareapp": {}
+      },
+      "hosting": {
+        "S3AndCloudFront": {}
       }
     }
   }

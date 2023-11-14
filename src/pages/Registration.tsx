@@ -87,11 +87,13 @@ const Registration: React.FC = () => {
     if (
       validationRules(name, "Name") === true &&
       validationRules(surname, "Surname") === true &&
-      validationRules(cell, "Cell") === true &&
+      validationRules(email, "Email") === true &&
+      validationRules(password, "Password") === true &&
+      validationRules(address, "Address") === true &&
       validationRules(postal, "Postal code") === true &&
       validationRules(idNumber, "ID") === true &&
-      validationRules(address, "Address") === true &&
-      validationRules(email, "Email") === true
+      validationRules(cell, "Cell") === true
+
       //   validationRules(password, "Password") === true
     ) {
       const userDetails: CreateUserInput = {
@@ -111,6 +113,8 @@ const Registration: React.FC = () => {
         variables: { input: userDetails },
       });
 
+      console.log(newUser);
+
       if (newUser.data) {
         Toast.fire({
           icon: "success",
@@ -125,7 +129,7 @@ const Registration: React.FC = () => {
     let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     const regPassword = /^[A-Za-z]\w{6,16}$/;
     //Names
-    if (type === "Name" || type === "Surname") {
+    if (type === "Name" || type === "Surname" || type === "Address") {
       if (data.length < 2) {
         Toast.fire({
           icon: "warning",
@@ -150,13 +154,31 @@ const Registration: React.FC = () => {
 
     //Password section
     if (type === "Password") {
-      if (!data.match(regPassword)) {
+      // Minimum length check (you can adjust this as needed)
+      if (data === "") {
+        Toast.fire({
+          icon: "warning",
+          title: "Password is requred!",
+        });
+
+        return false;
+      }
+
+      // Regular expressions for character set checks
+      const hasUpperCase = /[A-Z]/.test(data);
+      const hasLowerCase = /[a-z]/.test(data);
+      const hasNumber = /[0-9]/.test(data);
+      const hasSpecialChar = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\-]/.test(data);
+
+      // Check if all character set conditions are met
+      if (
+        (hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar) != true
+      ) {
         Toast.fire({
           icon: "warning",
           title:
-            "Check passwords consisting of 6 to 8 uppercase and lowercase alphanumeric underscores",
+            "We first check the minimum length requirement for the password (in this case, 8 characters). The password must contains at least one uppercase letter, one lowercase letter, one number, and one special character.",
         });
-
         return false;
       }
     }
@@ -215,7 +237,10 @@ const Registration: React.FC = () => {
         <Nav />
 
         <section className="about-section  bg-light">
-          <h2 className="about-sub text-secondary pb-5"> <AiOutlineUserAdd size="30" /> Create new account</h2>
+          <h2 className="about-sub text-secondary pb-5">
+            {" "}
+            <AiOutlineUserAdd size="30" /> Create new account
+          </h2>
 
           <div className="row text-center">
             <div className="col-sm-6 mb-3 mb-sm-0">
@@ -250,6 +275,7 @@ const Registration: React.FC = () => {
               <IonItem>
                 <IonInput
                   label="Password"
+                  type="password"
                   onInput={(e: any) => setPassword(e.target.value)}
                   labelPlacement="floating"
                   placeholder="Enter text"
@@ -268,6 +294,7 @@ const Registration: React.FC = () => {
               <IonItem>
                 <IonInput
                   label="User postal code"
+                  type="number"
                   onInput={(e: any) => setPostal(e.target.value)}
                   labelPlacement="floating"
                   placeholder="Enter text"
@@ -277,6 +304,7 @@ const Registration: React.FC = () => {
               <IonItem>
                 <IonInput
                   label="ID Number"
+                  type="number"
                   onInput={(e: any) => setIdNumber(e.target.value)}
                   labelPlacement="floating"
                   placeholder="Enter text"
@@ -286,6 +314,7 @@ const Registration: React.FC = () => {
               <IonItem>
                 <IonInput
                   label="Cell No"
+                  type="number"
                   onInput={(e: any) => setCell(e.target.value)}
                   labelPlacement="floating"
                   placeholder="Enter text"

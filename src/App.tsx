@@ -14,6 +14,7 @@ import { ellipse, square, triangle } from "ionicons/icons";
 import Tab1 from "./pages/Home";
 import Tab2 from "./pages/Tab2";
 import Tab3 from "./pages/Tab3";
+import "./App.css";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -42,35 +43,89 @@ import Profile from "./pages/Profile";
 import { GraphQLSubscription } from "@aws-amplify/api";
 import * as subscriptions from "./graphql/subscriptions";
 import { GraphQLQuery } from "@aws-amplify/api";
-import { Amplify } from "aws-amplify";
+import { Amplify, Auth } from "aws-amplify";
 import { parseAWSExports } from "@aws-amplify/core";
 import awsExports from "./aws-exports";
 import { useEffect, useState } from "react";
 import { API, graphqlOperation } from "aws-amplify";
 import {
-  ListGovernmentGrantsQuery,
+  ListAdminsQuery,
+  ListMedicalDoctorsQuery,
   ListUsersQuery,
   OnUpdateUserSubscription,
 } from "./API";
 import * as queries from "./graphql/queries";
 import AllUsers from "./context/users";
 import LoginData from "./context/login";
-import Grant from "./pages/Grant";
 import GrantData from "./context/grant";
+import CustomNavigationTap from "./context/custNav";
+import MedicalHistory from "./pages/MedicalHistory";
+import Swal from "sweetalert2";
+import "./App.css";
+import { Hub, Logger } from "aws-amplify";
+import Dashboad from "./pages/Dashboad";
+import Users from "./pages/Users";
+import AdminMedical from "./pages/AdminMedical";
+import AdminGrant from "./pages/AdminGrant";
+import AdminRegister from "./pages/AdminRegister";
+import Print from "./pages/Print";
+import AdminHospitals from "./pages/AdminHospitals";
+import Doctors from "./pages/Doctors";
+import "primereact/resources/themes/lara-light-indigo/theme.css"; // theme
+import "primereact/resources/primereact.css"; // core css
+import "./style.css";
+import "./flags.css";
+import AdminData from "./context/admin";
+import AdminLogin from "./context/adminlogin";
+import AllDoctors from "./context/doctors";
+import DoctorProfile from "./pages/DoctorProfile";
+import AdminEdit from "./pages/AdminEdit";
+import UserSelected from "./context/selected_user";
+import Appointment from "./pages/Appointment";
+import UserAppointment from "./pages/UserAppointment";
+import Prescription from "./pages/Prescription";
 
 Amplify.configure(awsExports);
 
 setupIonicReact();
 
 const App: React.FC = () => {
+  const logger = new Logger("My-Logger");
   const [users, setUsers]: any = useState();
+  const [selectedUser, setSelectedUser]: any = useState();
+  const [allDoc, setAllDoc]: any = useState();
+  const [admin, setAdmin]: any = useState();
   const [loginUser, setLoginUser]: any = useState();
-  const [getGrant, setGrant]: any = useState();
+  const [loginAdmin, setloginAdmin]: any = useState();
+  const [getGrant, setGrant]: any = useState([]);
+  const localData: any = localStorage.getItem("user");
+  const [customNavTap, setCustomNavTap]: any = useState(" ");
 
   useEffect(() => {
+    getAllAdmin();
     getAllUsers();
-    getAllGrant();
+    getAllDoc();
   }, []);
+
+  useEffect(() => {
+    console.log(localStorage.getItem("user"));
+    if (localStorage.getItem("user") != null) {
+      setLoginUser(JSON.parse(localData));
+    }
+  }, []);
+
+  //Sweet Alert Toast
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener("mouseenter", Swal.stopTimer);
+      toast.addEventListener("mouseleave", Swal.resumeTimer);
+    },
+  });
 
   //Get all users
   async function getAllUsers() {
@@ -81,15 +136,22 @@ const App: React.FC = () => {
     setUsers(allUsers.data?.listUsers?.items);
   }
 
-  //Get user grant
-  async function getAllGrant() {
-    const allGrant = await API.graphql<GraphQLQuery<ListGovernmentGrantsQuery>>(
-      {
-        query: queries.listGovernmentGrants,
-      }
-    );
-    console.log(allGrant.data?.listGovernmentGrants?.items);
-    setGrant(allGrant.data?.listGovernmentGrants?.items);
+  //Get all users
+  async function getAllAdmin() {
+    const allAdmin = await API.graphql<GraphQLQuery<ListAdminsQuery>>({
+      query: queries.listAdmins,
+    });
+    console.log(allAdmin.data?.listAdmins?.items);
+    setAdmin(allAdmin.data?.listAdmins?.items);
+  }
+
+  //Get all users
+  async function getAllDoc() {
+    const allAdmin = await API.graphql<GraphQLQuery<ListMedicalDoctorsQuery>>({
+      query: queries.listMedicalDoctors,
+    });
+    console.log(allAdmin.data?.listMedicalDoctors?.items);
+    setAllDoc(allAdmin.data?.listMedicalDoctors?.items);
   }
 
   useEffect(() => {
@@ -113,40 +175,106 @@ const App: React.FC = () => {
         <AllUsers.Provider value={{ users, setUsers }}>
           <LoginData.Provider value={{ loginUser, setLoginUser }}>
             <GrantData.Provider value={{ getGrant, setGrant }}>
-              <IonTabs>
-                <IonRouterOutlet>
-                  <Route exact path="/home">
-                    <Home />
-                  </Route>
-                  <Route exact path="/registration">
-                    <Registration />
-                  </Route>
-                  <Route path="/medical">
-                    <Medical />
-                  </Route>
+              <CustomNavigationTap.Provider
+                value={{ customNavTap, setCustomNavTap }}
+              >
+                <AdminData.Provider value={{ admin, setAdmin }}>
+                  <AdminLogin.Provider value={{ loginAdmin, setloginAdmin }}>
+                    <AllDoctors.Provider value={{ allDoc, setAllDoc }}>
+                      <UserSelected.Provider
+                        value={{ selectedUser, setSelectedUser }}
+                      >
+                        <IonTabs>
+                          <IonRouterOutlet>
+                            <Route exact path="/home">
+                              <Home />
+                            </Route>
+                            <Route exact path="/registration">
+                              <Registration />
+                            </Route>
+                            <Route path="/medical">
+                              <Medical />
+                            </Route>
 
-                  <Route path="/profile">
-                    <Profile />
-                  </Route>
+                            <Route path="/profile">
+                              <Profile />
+                            </Route>
 
-                  <Route path="/notifications">
-                    <Notifications />
-                  </Route>
+                            <Route path="/doctorprofile">
+                              <DoctorProfile />
+                            </Route>
 
-                  <Route path="/grant">
-                    <Grant />
-                  </Route>
+                            <Route path="/notifications">
+                              <Notifications />
+                            </Route>
 
-                  <Route exact path="/">
-                    <Redirect to="/home" />
-                  </Route>
-                </IonRouterOutlet>
+                            <Route path="/adminedit">
+                              <AdminEdit />
+                            </Route>
 
-                <IonTabBar
-                  slot="bottom"
-                  style={{ display: "none" }}
-                ></IonTabBar>
-              </IonTabs>
+                            <Route path="/appointment">
+                              <Appointment />
+                            </Route>
+
+                            <Route path="/prescription">
+                              <Prescription />
+                            </Route>
+
+                            <Route path="/userappointment">
+                              <UserAppointment />
+                            </Route>
+
+                            <Route path="/adminhospitals">
+                              <AdminHospitals />
+                            </Route>
+
+                            <Route path="/print">
+                              <Print />
+                            </Route>
+
+                            <Route path="/adminregister">
+                              <AdminRegister />
+                            </Route>
+
+                            <Route path="/dashboad">
+                              <Dashboad />
+                            </Route>
+
+                            <Route path="/adminmedical">
+                              <AdminMedical />
+                            </Route>
+
+                            <Route path="/users">
+                              <Users />
+                            </Route>
+
+                            <Route path="/admingrant">
+                              <AdminGrant />
+                            </Route>
+
+                            <Route path="/doctors">
+                              <Doctors />
+                            </Route>
+
+                            <Route path="/medicalHistory">
+                              <MedicalHistory />
+                            </Route>
+
+                            <Route exact path="/">
+                              <Redirect to="/home" />
+                            </Route>
+                          </IonRouterOutlet>
+
+                          <IonTabBar
+                            slot="bottom"
+                            style={{ display: "none" }}
+                          ></IonTabBar>
+                        </IonTabs>
+                      </UserSelected.Provider>
+                    </AllDoctors.Provider>
+                  </AdminLogin.Provider>
+                </AdminData.Provider>
+              </CustomNavigationTap.Provider>
             </GrantData.Provider>
           </LoginData.Provider>
         </AllUsers.Provider>

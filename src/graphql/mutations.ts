@@ -18,34 +18,7 @@ export const createUser = /* GraphQL */ `
       id_number
       cell_phone_no
       access_type
-      notification {
-        items {
-          id
-          message
-          user_id
-          createdAt
-          updatedAt
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      medicalReport {
-        items {
-          id
-          report_text
-          doctor_name
-          appointment_date
-          medical_report_status
-          user_id
-          createdAt
-          updatedAt
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      biometricData {
+      biometricdata {
         items {
           id
           data
@@ -58,18 +31,29 @@ export const createUser = /* GraphQL */ `
         nextToken
         __typename
       }
-      governmentGrant {
-        id
-        grantName
-        description
-        amount
-        startDate
-        endDate
-        applicationDeadline
-        eligibilityRequirements
-        applicationProcess
-        createdAt
-        updatedAt
+      patient {
+        items {
+          id
+          user_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      appointment {
+        items {
+          id
+          appointmentDate
+          status
+          notes
+          user_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
         __typename
       }
       createdAt
@@ -94,34 +78,7 @@ export const updateUser = /* GraphQL */ `
       id_number
       cell_phone_no
       access_type
-      notification {
-        items {
-          id
-          message
-          user_id
-          createdAt
-          updatedAt
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      medicalReport {
-        items {
-          id
-          report_text
-          doctor_name
-          appointment_date
-          medical_report_status
-          user_id
-          createdAt
-          updatedAt
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      biometricData {
+      biometricdata {
         items {
           id
           data
@@ -134,18 +91,29 @@ export const updateUser = /* GraphQL */ `
         nextToken
         __typename
       }
-      governmentGrant {
-        id
-        grantName
-        description
-        amount
-        startDate
-        endDate
-        applicationDeadline
-        eligibilityRequirements
-        applicationProcess
-        createdAt
-        updatedAt
+      patient {
+        items {
+          id
+          user_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      appointment {
+        items {
+          id
+          appointmentDate
+          status
+          notes
+          user_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
         __typename
       }
       createdAt
@@ -170,34 +138,7 @@ export const deleteUser = /* GraphQL */ `
       id_number
       cell_phone_no
       access_type
-      notification {
-        items {
-          id
-          message
-          user_id
-          createdAt
-          updatedAt
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      medicalReport {
-        items {
-          id
-          report_text
-          doctor_name
-          appointment_date
-          medical_report_status
-          user_id
-          createdAt
-          updatedAt
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      biometricData {
+      biometricdata {
         items {
           id
           data
@@ -210,65 +151,31 @@ export const deleteUser = /* GraphQL */ `
         nextToken
         __typename
       }
-      governmentGrant {
-        id
-        grantName
-        description
-        amount
-        startDate
-        endDate
-        applicationDeadline
-        eligibilityRequirements
-        applicationProcess
-        createdAt
-        updatedAt
+      patient {
+        items {
+          id
+          user_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
         __typename
       }
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const createNotification = /* GraphQL */ `
-  mutation CreateNotification(
-    $input: CreateNotificationInput!
-    $condition: ModelNotificationConditionInput
-  ) {
-    createNotification(input: $input, condition: $condition) {
-      id
-      message
-      user_id
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const updateNotification = /* GraphQL */ `
-  mutation UpdateNotification(
-    $input: UpdateNotificationInput!
-    $condition: ModelNotificationConditionInput
-  ) {
-    updateNotification(input: $input, condition: $condition) {
-      id
-      message
-      user_id
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const deleteNotification = /* GraphQL */ `
-  mutation DeleteNotification(
-    $input: DeleteNotificationInput!
-    $condition: ModelNotificationConditionInput
-  ) {
-    deleteNotification(input: $input, condition: $condition) {
-      id
-      message
-      user_id
+      appointment {
+        items {
+          id
+          appointmentDate
+          status
+          notes
+          user_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
       createdAt
       updatedAt
       __typename
@@ -323,25 +230,197 @@ export const deleteBiometricData = /* GraphQL */ `
     }
   }
 `;
-export const createMedicalReport = /* GraphQL */ `
-  mutation CreateMedicalReport(
-    $input: CreateMedicalReportInput!
-    $condition: ModelMedicalReportConditionInput
+export const createAppointment = /* GraphQL */ `
+  mutation CreateAppointment(
+    $input: CreateAppointmentInput!
+    $condition: ModelAppointmentConditionInput
   ) {
-    createMedicalReport(input: $input, condition: $condition) {
+    createAppointment(input: $input, condition: $condition) {
+      id
+      appointmentDate
+      status
+      notes
+      user_id
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const updateAppointment = /* GraphQL */ `
+  mutation UpdateAppointment(
+    $input: UpdateAppointmentInput!
+    $condition: ModelAppointmentConditionInput
+  ) {
+    updateAppointment(input: $input, condition: $condition) {
+      id
+      appointmentDate
+      status
+      notes
+      user_id
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const deleteAppointment = /* GraphQL */ `
+  mutation DeleteAppointment(
+    $input: DeleteAppointmentInput!
+    $condition: ModelAppointmentConditionInput
+  ) {
+    deleteAppointment(input: $input, condition: $condition) {
+      id
+      appointmentDate
+      status
+      notes
+      user_id
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const createAdmin = /* GraphQL */ `
+  mutation CreateAdmin(
+    $input: CreateAdminInput!
+    $condition: ModelAdminConditionInput
+  ) {
+    createAdmin(input: $input, condition: $condition) {
+      id
+      name
+      surname
+      email
+      password
+      access_type
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const updateAdmin = /* GraphQL */ `
+  mutation UpdateAdmin(
+    $input: UpdateAdminInput!
+    $condition: ModelAdminConditionInput
+  ) {
+    updateAdmin(input: $input, condition: $condition) {
+      id
+      name
+      surname
+      email
+      password
+      access_type
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const deleteAdmin = /* GraphQL */ `
+  mutation DeleteAdmin(
+    $input: DeleteAdminInput!
+    $condition: ModelAdminConditionInput
+  ) {
+    deleteAdmin(input: $input, condition: $condition) {
+      id
+      name
+      surname
+      email
+      password
+      access_type
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const createMedicalRecords = /* GraphQL */ `
+  mutation CreateMedicalRecords(
+    $input: CreateMedicalRecordsInput!
+    $condition: ModelMedicalRecordsConditionInput
+  ) {
+    createMedicalRecords(input: $input, condition: $condition) {
       id
       report_text
       doctor_name
       appointment_date
       medical_report_status
+      patient_id
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const updateMedicalRecords = /* GraphQL */ `
+  mutation UpdateMedicalRecords(
+    $input: UpdateMedicalRecordsInput!
+    $condition: ModelMedicalRecordsConditionInput
+  ) {
+    updateMedicalRecords(input: $input, condition: $condition) {
+      id
+      report_text
+      doctor_name
+      appointment_date
+      medical_report_status
+      patient_id
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const deleteMedicalRecords = /* GraphQL */ `
+  mutation DeleteMedicalRecords(
+    $input: DeleteMedicalRecordsInput!
+    $condition: ModelMedicalRecordsConditionInput
+  ) {
+    deleteMedicalRecords(input: $input, condition: $condition) {
+      id
+      report_text
+      doctor_name
+      appointment_date
+      medical_report_status
+      patient_id
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const createPatient = /* GraphQL */ `
+  mutation CreatePatient(
+    $input: CreatePatientInput!
+    $condition: ModelPatientConditionInput
+  ) {
+    createPatient(input: $input, condition: $condition) {
+      id
       user_id
-      hospital {
+      prescription {
         items {
           id
-          hospital_name
-          address
-          postal_code
-          medical_report_id
+          patient_name
+          medication_name
+          dosage
+          doctor_name
+          patient_id
+          medical_doctor_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      medicalRecords {
+        items {
+          id
+          report_text
+          doctor_name
+          appointment_date
+          medical_report_status
+          patient_id
           createdAt
           updatedAt
           __typename
@@ -355,25 +434,38 @@ export const createMedicalReport = /* GraphQL */ `
     }
   }
 `;
-export const updateMedicalReport = /* GraphQL */ `
-  mutation UpdateMedicalReport(
-    $input: UpdateMedicalReportInput!
-    $condition: ModelMedicalReportConditionInput
+export const updatePatient = /* GraphQL */ `
+  mutation UpdatePatient(
+    $input: UpdatePatientInput!
+    $condition: ModelPatientConditionInput
   ) {
-    updateMedicalReport(input: $input, condition: $condition) {
+    updatePatient(input: $input, condition: $condition) {
       id
-      report_text
-      doctor_name
-      appointment_date
-      medical_report_status
       user_id
-      hospital {
+      prescription {
         items {
           id
-          hospital_name
-          address
-          postal_code
-          medical_report_id
+          patient_name
+          medication_name
+          dosage
+          doctor_name
+          patient_id
+          medical_doctor_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      medicalRecords {
+        items {
+          id
+          report_text
+          doctor_name
+          appointment_date
+          medical_report_status
+          patient_id
           createdAt
           updatedAt
           __typename
@@ -387,25 +479,23 @@ export const updateMedicalReport = /* GraphQL */ `
     }
   }
 `;
-export const deleteMedicalReport = /* GraphQL */ `
-  mutation DeleteMedicalReport(
-    $input: DeleteMedicalReportInput!
-    $condition: ModelMedicalReportConditionInput
+export const deletePatient = /* GraphQL */ `
+  mutation DeletePatient(
+    $input: DeletePatientInput!
+    $condition: ModelPatientConditionInput
   ) {
-    deleteMedicalReport(input: $input, condition: $condition) {
+    deletePatient(input: $input, condition: $condition) {
       id
-      report_text
-      doctor_name
-      appointment_date
-      medical_report_status
       user_id
-      hospital {
+      prescription {
         items {
           id
-          hospital_name
-          address
-          postal_code
-          medical_report_id
+          patient_name
+          medication_name
+          dosage
+          doctor_name
+          patient_id
+          medical_doctor_id
           createdAt
           updatedAt
           __typename
@@ -413,60 +503,21 @@ export const deleteMedicalReport = /* GraphQL */ `
         nextToken
         __typename
       }
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const createMedicalHistory = /* GraphQL */ `
-  mutation CreateMedicalHistory(
-    $input: CreateMedicalHistoryInput!
-    $condition: ModelMedicalHistoryConditionInput
-  ) {
-    createMedicalHistory(input: $input, condition: $condition) {
-      id
-      condition
-      allergies
-      surgeries
-      medications
-      user_id
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const updateMedicalHistory = /* GraphQL */ `
-  mutation UpdateMedicalHistory(
-    $input: UpdateMedicalHistoryInput!
-    $condition: ModelMedicalHistoryConditionInput
-  ) {
-    updateMedicalHistory(input: $input, condition: $condition) {
-      id
-      condition
-      allergies
-      surgeries
-      medications
-      user_id
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const deleteMedicalHistory = /* GraphQL */ `
-  mutation DeleteMedicalHistory(
-    $input: DeleteMedicalHistoryInput!
-    $condition: ModelMedicalHistoryConditionInput
-  ) {
-    deleteMedicalHistory(input: $input, condition: $condition) {
-      id
-      condition
-      allergies
-      surgeries
-      medications
-      user_id
+      medicalRecords {
+        items {
+          id
+          report_text
+          doctor_name
+          appointment_date
+          medical_report_status
+          patient_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
       createdAt
       updatedAt
       __typename
@@ -483,15 +534,45 @@ export const createHospital = /* GraphQL */ `
       hospital_name
       address
       postal_code
-      medical_report_id
-      doctor {
+      medicalDoctor {
         items {
           id
           first_name
           last_name
           specialization
-          cell_no
+          email
+          password
+          phone
+          access_type
           hospital_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      departmentOfHomeAffairs {
+        items {
+          hospital_id
+          name
+          surname
+          address
+          postal_code
+          id_number
+          cell_phone_no
+          race
+          date_of_birth
+          gender
+          nationality
+          email
+          marital_status
+          citizenship_status
+          photo_url
+          notes
+          emergency_contact_name
+          emergency_contact_phone
+          id
           createdAt
           updatedAt
           __typename
@@ -515,15 +596,45 @@ export const updateHospital = /* GraphQL */ `
       hospital_name
       address
       postal_code
-      medical_report_id
-      doctor {
+      medicalDoctor {
         items {
           id
           first_name
           last_name
           specialization
-          cell_no
+          email
+          password
+          phone
+          access_type
           hospital_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      departmentOfHomeAffairs {
+        items {
+          hospital_id
+          name
+          surname
+          address
+          postal_code
+          id_number
+          cell_phone_no
+          race
+          date_of_birth
+          gender
+          nationality
+          email
+          marital_status
+          citizenship_status
+          photo_url
+          notes
+          emergency_contact_name
+          emergency_contact_phone
+          id
           createdAt
           updatedAt
           __typename
@@ -547,15 +658,45 @@ export const deleteHospital = /* GraphQL */ `
       hospital_name
       address
       postal_code
-      medical_report_id
-      doctor {
+      medicalDoctor {
         items {
           id
           first_name
           last_name
           specialization
-          cell_no
+          email
+          password
+          phone
+          access_type
           hospital_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      departmentOfHomeAffairs {
+        items {
+          hospital_id
+          name
+          surname
+          address
+          postal_code
+          id_number
+          cell_phone_no
+          race
+          date_of_birth
+          gender
+          nationality
+          email
+          marital_status
+          citizenship_status
+          photo_url
+          notes
+          emergency_contact_name
+          emergency_contact_phone
+          id
           createdAt
           updatedAt
           __typename
@@ -569,132 +710,261 @@ export const deleteHospital = /* GraphQL */ `
     }
   }
 `;
-export const createDoctor = /* GraphQL */ `
-  mutation CreateDoctor(
-    $input: CreateDoctorInput!
-    $condition: ModelDoctorConditionInput
+export const createPrescription = /* GraphQL */ `
+  mutation CreatePrescription(
+    $input: CreatePrescriptionInput!
+    $condition: ModelPrescriptionConditionInput
   ) {
-    createDoctor(input: $input, condition: $condition) {
+    createPrescription(input: $input, condition: $condition) {
+      id
+      patient_name
+      medication_name
+      dosage
+      doctor_name
+      patient_id
+      medical_doctor_id
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const updatePrescription = /* GraphQL */ `
+  mutation UpdatePrescription(
+    $input: UpdatePrescriptionInput!
+    $condition: ModelPrescriptionConditionInput
+  ) {
+    updatePrescription(input: $input, condition: $condition) {
+      id
+      patient_name
+      medication_name
+      dosage
+      doctor_name
+      patient_id
+      medical_doctor_id
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const deletePrescription = /* GraphQL */ `
+  mutation DeletePrescription(
+    $input: DeletePrescriptionInput!
+    $condition: ModelPrescriptionConditionInput
+  ) {
+    deletePrescription(input: $input, condition: $condition) {
+      id
+      patient_name
+      medication_name
+      dosage
+      doctor_name
+      patient_id
+      medical_doctor_id
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const createMedicalDoctor = /* GraphQL */ `
+  mutation CreateMedicalDoctor(
+    $input: CreateMedicalDoctorInput!
+    $condition: ModelMedicalDoctorConditionInput
+  ) {
+    createMedicalDoctor(input: $input, condition: $condition) {
       id
       first_name
       last_name
       specialization
-      contactInformation {
-        email
-        phone
+      email
+      password
+      phone
+      access_type
+      hospital_id
+      prescription {
+        items {
+          id
+          patient_name
+          medication_name
+          dosage
+          doctor_name
+          patient_id
+          medical_doctor_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
         __typename
       }
-      cell_no
-      hospital_id
       createdAt
       updatedAt
       __typename
     }
   }
 `;
-export const updateDoctor = /* GraphQL */ `
-  mutation UpdateDoctor(
-    $input: UpdateDoctorInput!
-    $condition: ModelDoctorConditionInput
+export const updateMedicalDoctor = /* GraphQL */ `
+  mutation UpdateMedicalDoctor(
+    $input: UpdateMedicalDoctorInput!
+    $condition: ModelMedicalDoctorConditionInput
   ) {
-    updateDoctor(input: $input, condition: $condition) {
+    updateMedicalDoctor(input: $input, condition: $condition) {
       id
       first_name
       last_name
       specialization
-      contactInformation {
-        email
-        phone
+      email
+      password
+      phone
+      access_type
+      hospital_id
+      prescription {
+        items {
+          id
+          patient_name
+          medication_name
+          dosage
+          doctor_name
+          patient_id
+          medical_doctor_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
         __typename
       }
-      cell_no
-      hospital_id
       createdAt
       updatedAt
       __typename
     }
   }
 `;
-export const deleteDoctor = /* GraphQL */ `
-  mutation DeleteDoctor(
-    $input: DeleteDoctorInput!
-    $condition: ModelDoctorConditionInput
+export const deleteMedicalDoctor = /* GraphQL */ `
+  mutation DeleteMedicalDoctor(
+    $input: DeleteMedicalDoctorInput!
+    $condition: ModelMedicalDoctorConditionInput
   ) {
-    deleteDoctor(input: $input, condition: $condition) {
+    deleteMedicalDoctor(input: $input, condition: $condition) {
       id
       first_name
       last_name
       specialization
-      contactInformation {
-        email
-        phone
+      email
+      password
+      phone
+      access_type
+      hospital_id
+      prescription {
+        items {
+          id
+          patient_name
+          medication_name
+          dosage
+          doctor_name
+          patient_id
+          medical_doctor_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
         __typename
       }
-      cell_no
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const createDepartmentOfHomeAffairs = /* GraphQL */ `
+  mutation CreateDepartmentOfHomeAffairs(
+    $input: CreateDepartmentOfHomeAffairsInput!
+    $condition: ModelDepartmentOfHomeAffairsConditionInput
+  ) {
+    createDepartmentOfHomeAffairs(input: $input, condition: $condition) {
       hospital_id
+      name
+      surname
+      address
+      postal_code
+      id_number
+      cell_phone_no
+      race
+      date_of_birth
+      gender
+      nationality
+      email
+      marital_status
+      citizenship_status
+      photo_url
+      notes
+      emergency_contact_name
+      emergency_contact_phone
+      id
       createdAt
       updatedAt
       __typename
     }
   }
 `;
-export const createGovernmentGrant = /* GraphQL */ `
-  mutation CreateGovernmentGrant(
-    $input: CreateGovernmentGrantInput!
-    $condition: ModelGovernmentGrantConditionInput
+export const updateDepartmentOfHomeAffairs = /* GraphQL */ `
+  mutation UpdateDepartmentOfHomeAffairs(
+    $input: UpdateDepartmentOfHomeAffairsInput!
+    $condition: ModelDepartmentOfHomeAffairsConditionInput
   ) {
-    createGovernmentGrant(input: $input, condition: $condition) {
+    updateDepartmentOfHomeAffairs(input: $input, condition: $condition) {
+      hospital_id
+      name
+      surname
+      address
+      postal_code
+      id_number
+      cell_phone_no
+      race
+      date_of_birth
+      gender
+      nationality
+      email
+      marital_status
+      citizenship_status
+      photo_url
+      notes
+      emergency_contact_name
+      emergency_contact_phone
       id
-      grantName
-      description
-      amount
-      startDate
-      endDate
-      applicationDeadline
-      eligibilityRequirements
-      applicationProcess
       createdAt
       updatedAt
       __typename
     }
   }
 `;
-export const updateGovernmentGrant = /* GraphQL */ `
-  mutation UpdateGovernmentGrant(
-    $input: UpdateGovernmentGrantInput!
-    $condition: ModelGovernmentGrantConditionInput
+export const deleteDepartmentOfHomeAffairs = /* GraphQL */ `
+  mutation DeleteDepartmentOfHomeAffairs(
+    $input: DeleteDepartmentOfHomeAffairsInput!
+    $condition: ModelDepartmentOfHomeAffairsConditionInput
   ) {
-    updateGovernmentGrant(input: $input, condition: $condition) {
+    deleteDepartmentOfHomeAffairs(input: $input, condition: $condition) {
+      hospital_id
+      name
+      surname
+      address
+      postal_code
+      id_number
+      cell_phone_no
+      race
+      date_of_birth
+      gender
+      nationality
+      email
+      marital_status
+      citizenship_status
+      photo_url
+      notes
+      emergency_contact_name
+      emergency_contact_phone
       id
-      grantName
-      description
-      amount
-      startDate
-      endDate
-      applicationDeadline
-      eligibilityRequirements
-      applicationProcess
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const deleteGovernmentGrant = /* GraphQL */ `
-  mutation DeleteGovernmentGrant(
-    $input: DeleteGovernmentGrantInput!
-    $condition: ModelGovernmentGrantConditionInput
-  ) {
-    deleteGovernmentGrant(input: $input, condition: $condition) {
-      id
-      grantName
-      description
-      amount
-      startDate
-      endDate
-      applicationDeadline
-      eligibilityRequirements
-      applicationProcess
       createdAt
       updatedAt
       __typename

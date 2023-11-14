@@ -15,34 +15,7 @@ export const getUser = /* GraphQL */ `
       id_number
       cell_phone_no
       access_type
-      notification {
-        items {
-          id
-          message
-          user_id
-          createdAt
-          updatedAt
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      medicalReport {
-        items {
-          id
-          report_text
-          doctor_name
-          appointment_date
-          medical_report_status
-          user_id
-          createdAt
-          updatedAt
-          __typename
-        }
-        nextToken
-        __typename
-      }
-      biometricData {
+      biometricdata {
         items {
           id
           data
@@ -55,18 +28,29 @@ export const getUser = /* GraphQL */ `
         nextToken
         __typename
       }
-      governmentGrant {
-        id
-        grantName
-        description
-        amount
-        startDate
-        endDate
-        applicationDeadline
-        eligibilityRequirements
-        applicationProcess
-        createdAt
-        updatedAt
+      patient {
+        items {
+          id
+          user_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      appointment {
+        items {
+          id
+          appointmentDate
+          status
+          notes
+          user_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
         __typename
       }
       createdAt
@@ -93,64 +77,18 @@ export const listUsers = /* GraphQL */ `
         id_number
         cell_phone_no
         access_type
-        notification {
+        biometricdata {
           nextToken
           __typename
         }
-        medicalReport {
+        patient {
           nextToken
           __typename
         }
-        biometricData {
+        appointment {
           nextToken
           __typename
         }
-        governmentGrant {
-          id
-          grantName
-          description
-          amount
-          startDate
-          endDate
-          applicationDeadline
-          eligibilityRequirements
-          applicationProcess
-          createdAt
-          updatedAt
-          __typename
-        }
-        createdAt
-        updatedAt
-        __typename
-      }
-      nextToken
-      __typename
-    }
-  }
-`;
-export const getNotification = /* GraphQL */ `
-  query GetNotification($id: ID!) {
-    getNotification(id: $id) {
-      id
-      message
-      user_id
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const listNotifications = /* GraphQL */ `
-  query ListNotifications(
-    $filter: ModelNotificationFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listNotifications(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        message
-        user_id
         createdAt
         updatedAt
         __typename
@@ -194,22 +132,147 @@ export const listBiometricData = /* GraphQL */ `
     }
   }
 `;
-export const getMedicalReport = /* GraphQL */ `
-  query GetMedicalReport($id: ID!) {
-    getMedicalReport(id: $id) {
+export const getAppointment = /* GraphQL */ `
+  query GetAppointment($id: ID!) {
+    getAppointment(id: $id) {
+      id
+      appointmentDate
+      status
+      notes
+      user_id
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const listAppointments = /* GraphQL */ `
+  query ListAppointments(
+    $filter: ModelAppointmentFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listAppointments(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        appointmentDate
+        status
+        notes
+        user_id
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const getAdmin = /* GraphQL */ `
+  query GetAdmin($id: ID!) {
+    getAdmin(id: $id) {
+      id
+      name
+      surname
+      email
+      password
+      access_type
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const listAdmins = /* GraphQL */ `
+  query ListAdmins(
+    $filter: ModelAdminFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listAdmins(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        surname
+        email
+        password
+        access_type
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const getMedicalRecords = /* GraphQL */ `
+  query GetMedicalRecords($id: ID!) {
+    getMedicalRecords(id: $id) {
       id
       report_text
       doctor_name
       appointment_date
       medical_report_status
+      patient_id
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const listMedicalRecords = /* GraphQL */ `
+  query ListMedicalRecords(
+    $filter: ModelMedicalRecordsFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listMedicalRecords(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        report_text
+        doctor_name
+        appointment_date
+        medical_report_status
+        patient_id
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const getPatient = /* GraphQL */ `
+  query GetPatient($id: ID!) {
+    getPatient(id: $id) {
+      id
       user_id
-      hospital {
+      prescription {
         items {
           id
-          hospital_name
-          address
-          postal_code
-          medical_report_id
+          patient_name
+          medication_name
+          dosage
+          doctor_name
+          patient_id
+          medical_doctor_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      medicalRecords {
+        items {
+          id
+          report_text
+          doctor_name
+          appointment_date
+          medical_report_status
+          patient_id
           createdAt
           updatedAt
           __typename
@@ -223,66 +286,24 @@ export const getMedicalReport = /* GraphQL */ `
     }
   }
 `;
-export const listMedicalReports = /* GraphQL */ `
-  query ListMedicalReports(
-    $filter: ModelMedicalReportFilterInput
+export const listPatients = /* GraphQL */ `
+  query ListPatients(
+    $filter: ModelPatientFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listMedicalReports(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listPatients(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        report_text
-        doctor_name
-        appointment_date
-        medical_report_status
         user_id
-        hospital {
+        prescription {
           nextToken
           __typename
         }
-        createdAt
-        updatedAt
-        __typename
-      }
-      nextToken
-      __typename
-    }
-  }
-`;
-export const getMedicalHistory = /* GraphQL */ `
-  query GetMedicalHistory($id: ID!) {
-    getMedicalHistory(id: $id) {
-      id
-      condition
-      allergies
-      surgeries
-      medications
-      user_id
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const listMedicalHistories = /* GraphQL */ `
-  query ListMedicalHistories(
-    $filter: ModelMedicalHistoryFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listMedicalHistories(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        condition
-        allergies
-        surgeries
-        medications
-        user_id
+        medicalRecords {
+          nextToken
+          __typename
+        }
         createdAt
         updatedAt
         __typename
@@ -299,15 +320,45 @@ export const getHospital = /* GraphQL */ `
       hospital_name
       address
       postal_code
-      medical_report_id
-      doctor {
+      medicalDoctor {
         items {
           id
           first_name
           last_name
           specialization
-          cell_no
+          email
+          password
+          phone
+          access_type
           hospital_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      departmentOfHomeAffairs {
+        items {
+          hospital_id
+          name
+          surname
+          address
+          postal_code
+          id_number
+          cell_phone_no
+          race
+          date_of_birth
+          gender
+          nationality
+          email
+          marital_status
+          citizenship_status
+          photo_url
+          notes
+          emergency_contact_name
+          emergency_contact_phone
+          id
           createdAt
           updatedAt
           __typename
@@ -333,8 +384,11 @@ export const listHospitals = /* GraphQL */ `
         hospital_name
         address
         postal_code
-        medical_report_id
-        doctor {
+        medicalDoctor {
+          nextToken
+          __typename
+        }
+        departmentOfHomeAffairs {
           nextToken
           __typename
         }
@@ -347,45 +401,101 @@ export const listHospitals = /* GraphQL */ `
     }
   }
 `;
-export const getDoctor = /* GraphQL */ `
-  query GetDoctor($id: ID!) {
-    getDoctor(id: $id) {
+export const getPrescription = /* GraphQL */ `
+  query GetPrescription($id: ID!) {
+    getPrescription(id: $id) {
       id
-      first_name
-      last_name
-      specialization
-      contactInformation {
-        email
-        phone
-        __typename
-      }
-      cell_no
-      hospital_id
+      patient_name
+      medication_name
+      dosage
+      doctor_name
+      patient_id
+      medical_doctor_id
       createdAt
       updatedAt
       __typename
     }
   }
 `;
-export const listDoctors = /* GraphQL */ `
-  query ListDoctors(
-    $filter: ModelDoctorFilterInput
+export const listPrescriptions = /* GraphQL */ `
+  query ListPrescriptions(
+    $filter: ModelPrescriptionFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listDoctors(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listPrescriptions(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        patient_name
+        medication_name
+        dosage
+        doctor_name
+        patient_id
+        medical_doctor_id
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const getMedicalDoctor = /* GraphQL */ `
+  query GetMedicalDoctor($id: ID!) {
+    getMedicalDoctor(id: $id) {
+      id
+      first_name
+      last_name
+      specialization
+      email
+      password
+      phone
+      access_type
+      hospital_id
+      prescription {
+        items {
+          id
+          patient_name
+          medication_name
+          dosage
+          doctor_name
+          patient_id
+          medical_doctor_id
+          createdAt
+          updatedAt
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const listMedicalDoctors = /* GraphQL */ `
+  query ListMedicalDoctors(
+    $filter: ModelMedicalDoctorFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listMedicalDoctors(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
         first_name
         last_name
         specialization
-        contactInformation {
-          email
-          phone
+        email
+        password
+        phone
+        access_type
+        hospital_id
+        prescription {
+          nextToken
           __typename
         }
-        cell_no
-        hospital_id
         createdAt
         updatedAt
         __typename
@@ -395,73 +505,65 @@ export const listDoctors = /* GraphQL */ `
     }
   }
 `;
-export const getGovernmentGrant = /* GraphQL */ `
-  query GetGovernmentGrant($id: ID!) {
-    getGovernmentGrant(id: $id) {
+export const getDepartmentOfHomeAffairs = /* GraphQL */ `
+  query GetDepartmentOfHomeAffairs($id: ID!) {
+    getDepartmentOfHomeAffairs(id: $id) {
+      hospital_id
+      name
+      surname
+      address
+      postal_code
+      id_number
+      cell_phone_no
+      race
+      date_of_birth
+      gender
+      nationality
+      email
+      marital_status
+      citizenship_status
+      photo_url
+      notes
+      emergency_contact_name
+      emergency_contact_phone
       id
-      grantName
-      description
-      amount
-      startDate
-      endDate
-      applicationDeadline
-      eligibilityRequirements
-      applicationProcess
       createdAt
       updatedAt
       __typename
     }
   }
 `;
-export const listGovernmentGrants = /* GraphQL */ `
-  query ListGovernmentGrants(
-    $filter: ModelGovernmentGrantFilterInput
+export const listDepartmentOfHomeAffairs = /* GraphQL */ `
+  query ListDepartmentOfHomeAffairs(
+    $filter: ModelDepartmentOfHomeAffairsFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listGovernmentGrants(
+    listDepartmentOfHomeAffairs(
       filter: $filter
       limit: $limit
       nextToken: $nextToken
     ) {
       items {
+        hospital_id
+        name
+        surname
+        address
+        postal_code
+        id_number
+        cell_phone_no
+        race
+        date_of_birth
+        gender
+        nationality
+        email
+        marital_status
+        citizenship_status
+        photo_url
+        notes
+        emergency_contact_name
+        emergency_contact_phone
         id
-        grantName
-        description
-        amount
-        startDate
-        endDate
-        applicationDeadline
-        eligibilityRequirements
-        applicationProcess
-        createdAt
-        updatedAt
-        __typename
-      }
-      nextToken
-      __typename
-    }
-  }
-`;
-export const notificationsByUser_id = /* GraphQL */ `
-  query NotificationsByUser_id(
-    $user_id: ID!
-    $sortDirection: ModelSortDirection
-    $filter: ModelNotificationFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    notificationsByUser_id(
-      user_id: $user_id
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        message
-        user_id
         createdAt
         updatedAt
         __typename
@@ -500,16 +602,46 @@ export const biometricDataByUser_id = /* GraphQL */ `
     }
   }
 `;
-export const medicalReportsByUser_id = /* GraphQL */ `
-  query MedicalReportsByUser_id(
+export const appointmentsByUser_id = /* GraphQL */ `
+  query AppointmentsByUser_id(
     $user_id: ID!
     $sortDirection: ModelSortDirection
-    $filter: ModelMedicalReportFilterInput
+    $filter: ModelAppointmentFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    medicalReportsByUser_id(
+    appointmentsByUser_id(
       user_id: $user_id
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        appointmentDate
+        status
+        notes
+        user_id
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const medicalRecordsByPatient_id = /* GraphQL */ `
+  query MedicalRecordsByPatient_id(
+    $patient_id: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelMedicalRecordsFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    medicalRecordsByPatient_id(
+      patient_id: $patient_id
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit
@@ -521,11 +653,7 @@ export const medicalReportsByUser_id = /* GraphQL */ `
         doctor_name
         appointment_date
         medical_report_status
-        user_id
-        hospital {
-          nextToken
-          __typename
-        }
+        patient_id
         createdAt
         updatedAt
         __typename
@@ -535,15 +663,15 @@ export const medicalReportsByUser_id = /* GraphQL */ `
     }
   }
 `;
-export const medicalHistoriesByUser_id = /* GraphQL */ `
-  query MedicalHistoriesByUser_id(
+export const patientsByUser_id = /* GraphQL */ `
+  query PatientsByUser_id(
     $user_id: ID!
     $sortDirection: ModelSortDirection
-    $filter: ModelMedicalHistoryFilterInput
+    $filter: ModelPatientFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    medicalHistoriesByUser_id(
+    patientsByUser_id(
       user_id: $user_id
       sortDirection: $sortDirection
       filter: $filter
@@ -552,42 +680,12 @@ export const medicalHistoriesByUser_id = /* GraphQL */ `
     ) {
       items {
         id
-        condition
-        allergies
-        surgeries
-        medications
         user_id
-        createdAt
-        updatedAt
-        __typename
-      }
-      nextToken
-      __typename
-    }
-  }
-`;
-export const hospitalsByMedical_report_id = /* GraphQL */ `
-  query HospitalsByMedical_report_id(
-    $medical_report_id: ID!
-    $sortDirection: ModelSortDirection
-    $filter: ModelHospitalFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    hospitalsByMedical_report_id(
-      medical_report_id: $medical_report_id
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        hospital_name
-        address
-        postal_code
-        medical_report_id
-        doctor {
+        prescription {
+          nextToken
+          __typename
+        }
+        medicalRecords {
           nextToken
           __typename
         }
@@ -600,15 +698,79 @@ export const hospitalsByMedical_report_id = /* GraphQL */ `
     }
   }
 `;
-export const doctorsByHospital_id = /* GraphQL */ `
-  query DoctorsByHospital_id(
-    $hospital_id: ID!
+export const prescriptionsByPatient_id = /* GraphQL */ `
+  query PrescriptionsByPatient_id(
+    $patient_id: ID!
     $sortDirection: ModelSortDirection
-    $filter: ModelDoctorFilterInput
+    $filter: ModelPrescriptionFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    doctorsByHospital_id(
+    prescriptionsByPatient_id(
+      patient_id: $patient_id
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        patient_name
+        medication_name
+        dosage
+        doctor_name
+        patient_id
+        medical_doctor_id
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const prescriptionsByMedical_doctor_id = /* GraphQL */ `
+  query PrescriptionsByMedical_doctor_id(
+    $medical_doctor_id: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelPrescriptionFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    prescriptionsByMedical_doctor_id(
+      medical_doctor_id: $medical_doctor_id
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        patient_name
+        medication_name
+        dosage
+        doctor_name
+        patient_id
+        medical_doctor_id
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const medicalDoctorsByHospital_id = /* GraphQL */ `
+  query MedicalDoctorsByHospital_id(
+    $hospital_id: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelMedicalDoctorFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    medicalDoctorsByHospital_id(
       hospital_id: $hospital_id
       sortDirection: $sortDirection
       filter: $filter
@@ -620,13 +782,59 @@ export const doctorsByHospital_id = /* GraphQL */ `
         first_name
         last_name
         specialization
-        contactInformation {
-          email
-          phone
+        email
+        password
+        phone
+        access_type
+        hospital_id
+        prescription {
+          nextToken
           __typename
         }
-        cell_no
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
+export const departmentOfHomeAffairsByHospital_id = /* GraphQL */ `
+  query DepartmentOfHomeAffairsByHospital_id(
+    $hospital_id: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelDepartmentOfHomeAffairsFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    departmentOfHomeAffairsByHospital_id(
+      hospital_id: $hospital_id
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
         hospital_id
+        name
+        surname
+        address
+        postal_code
+        id_number
+        cell_phone_no
+        race
+        date_of_birth
+        gender
+        nationality
+        email
+        marital_status
+        citizenship_status
+        photo_url
+        notes
+        emergency_contact_name
+        emergency_contact_phone
+        id
         createdAt
         updatedAt
         __typename

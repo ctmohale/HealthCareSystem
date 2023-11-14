@@ -15,7 +15,11 @@ import {
 } from "@ionic/react";
 import { CgMenuRight } from "react-icons/cg";
 import { GiTakeMyMoney } from "react-icons/gi";
-import { FaUserDoctor } from "react-icons/fa6";
+import {
+  FaBriefcaseMedical,
+  FaSuitcaseMedical,
+  FaUserDoctor,
+} from "react-icons/fa6";
 import { FaUserCircle } from "react-icons/fa";
 
 import { TbReportMedical } from "react-icons/tb";
@@ -31,6 +35,11 @@ import { HiBellAlert } from "react-icons/hi2";
 import LoginData from "../context/login";
 import AllUsers from "../context/users";
 import Swal from "sweetalert2";
+import CustomNavigationTap from "../context/custNav";
+import { Auth } from "aws-amplify";
+import AdminLogin from "../context/adminlogin";
+import AdminData from "../context/admin";
+import AllDoctors from "../context/doctors";
 
 function Nav() {
   const [isOpen, setIsOpen]: any = useState(false);
@@ -39,12 +48,16 @@ function Nav() {
   const [password, setPassword]: any = useState(" ");
   const { users }: any = useContext(AllUsers);
   const [loginState, setLoginState]: any = useState(false);
+  const { setCustomNavTap }: any = useContext(CustomNavigationTap);
+  const { loginAdmin, setloginAdmin }: any = useContext(AdminLogin);
+  const { admin, setAdmin }: any = useContext(AdminData);
+  const { allDoc, setAllDoc }: any = useContext(AllDoctors);
 
   const modal = useRef<HTMLIonModalElement>(null);
 
   useEffect(() => {
-    console.log(users);
-  }, [users]);
+    console.log(admin);
+  }, [admin]);
 
   const Toast = Swal.mixin({
     toast: true,
@@ -58,33 +71,75 @@ function Nav() {
     },
   });
 
-  //Logout
-  function signOut() {
-    setLoginUser(null);
+  function loginFunction() {
+    if (!users || email === "" || password === "") {
+      Toast.fire({
+        icon: "warning",
+        title: "Error, please enter valid login info...",
+      });
+      setIsOpen(false);
+      return;
+    }
+
+    const user = findUser(users, email, password, "user");
+    const adminUser = findUser(admin, email, password, "admin");
+    const doctorUser = findUser(allDoc, email, password, "doctor");
+
+    if (user) {
+      handleLogin(user, false);
+    } else if (adminUser) {
+      handleLogin(adminUser, true);
+      window.location.replace("/Dashboad");
+    } else if (doctorUser) {
+      handleLogin(doctorUser, true);
+      window.location.replace("/adminmedical");
+    } else {
+      Toast.fire({
+        icon: "warning",
+        title: "Error, please enter correct login info...", 
+      });
+    }
   }
 
-  //Login
-  function loginFunction() {
-    if (users != null && email != "" && password != "") {
-      console.log(users);
-      users.map((user_element: any) => {
-        if (
-          user_element.email === email &&
-          user_element.password === password
-        ) {
-          setLoginUser(user_element);
-          setLoginState(true);
+  function findUser(users: any, email: any, password: any, accessType: any) {
+    return users.find(
+      (user_element: any) =>
+        user_element.email === email &&
+        user_element.password === password &&
+        user_element.access_type === accessType
+    );
+  }
 
-          Toast.fire({
-            icon: "success",
-            title: "Login successfull! Welcome",
-          });
-          return;
-        }
+  function handleLogin(user: any, isAdmin: any) {
+    const data = JSON.stringify(user);
+    localStorage.setItem("user", data);
+    setLoginUser(user);
+
+    if (isAdmin) {
+      setLoginState(true);
+      Toast.fire({
+        icon: "success",
+        title: "Login successful! Welcome Admin",
+      });
+    } else {
+      Toast.fire({
+        icon: "success",
+        title: "Login successful! Welcome",
       });
     }
 
     setIsOpen(false);
+  }
+  //Logout
+  async function signOut() {
+    try {
+      await Auth.signOut();
+      localStorage.removeItem("user");
+      setLoginUser(null);
+      window.location.replace("/");
+    } catch (error) {
+      console.log("error signing out: ", error);
+    }
   }
 
   return (
@@ -114,6 +169,11 @@ function Nav() {
           >
             <CgMenuRight size="20" />
           </IonButton>
+          {loginUser && loginUser.access_type === "doctor" && (
+            <IonButton routerLink="/adminmedical" fill="clear" color="medium">
+              <FaSuitcaseMedical size="20" /> &#8202; Medical Section
+            </IonButton>
+          )}
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
@@ -126,7 +186,7 @@ function Nav() {
               </li>
             </ul>
 
-            {loginUser != null ? (
+            {loginUser != null && loginUser.access_type === "user" ? (
               <>
                 <IonButton
                   fill="clear"
@@ -136,15 +196,7 @@ function Nav() {
                 >
                   <HiBellAlert size="25" /> Medical Alerts
                 </IonButton>
-                <br />
-                <IonButton
-                  fill="clear"
-                  shape="round"
-                  routerLink="/grant"
-                  color="medium"
-                >
-                  <GiTakeMyMoney size="25" /> Grant
-                </IonButton>
+
                 <br />
                 <IonButton
                   fill="clear"
@@ -152,7 +204,7 @@ function Nav() {
                   routerLink="/medical"
                   color="medium"
                 >
-                  <TbReportMedical size="25" /> Medical Report
+                  <TbReportMedical size="25" /> Medical
                 </IonButton>
                 <br />
                 <IonButton
@@ -176,9 +228,67 @@ function Nav() {
                 </IonButton>
                 <br />
               </>
+            ) : loginUser != null && loginUser.access_type === "admin" ? (
+              <>
+                <br />
+                <IonButton
+                  fill="clear"
+                  shape="round"
+                  routerLink="/profile"
+                  color="medium"
+                >
+                  <AiOutlineUser size="25" />
+                  {loginUser.name.substring(0, 1) + " " + loginUser.surname}
+                </IonButton>
+                <br />
+                <IonButton
+                  fill="clear"
+                  shape="round"
+                  routerLink="/"
+                  onClick={() => signOut()}
+                  color="medium"
+                >
+                  <BiLogOutCircle size="25" /> Sign Out
+                </IonButton>
+                <br />
+              </>
+            ) : loginUser != null &&
+              loginUser.access_type === "medical hospital" ? (
+              ""
+            ) : loginUser != null &&
+              loginUser.access_type === "home affairs" ? (
+              ""
+            ) : loginUser && loginUser.access_type === "doctor" ? (
+              <>
+                {" "}
+                <>
+                  <br />
+                  <IonButton
+                    fill="clear"
+                    shape="round"
+                    routerLink="/doctorprofile"
+                    color="medium"
+                  >
+                    <AiOutlineUser size="25" />
+                    {loginUser.first_name.substring(0, 1) +
+                      " " +
+                      loginUser.last_name}
+                  </IonButton>
+                  <br />
+                  <IonButton
+                    fill="clear"
+                    shape="round"
+                    routerLink="/"
+                    onClick={() => signOut()}
+                    color="medium"
+                  >
+                    <BiLogOutCircle size="25" /> Sign Out
+                  </IonButton>
+                  <br />
+                </>
+              </>
             ) : (
               <IonButton
-                id="loginModalSection"
                 fill="clear"
                 shape="round"
                 color="medium"
@@ -208,13 +318,13 @@ function Nav() {
         <IonContent>
           <div className="login_title text-secondary">
             <h4 className="text-secondary p-5">
-              Helath Care <FaUserDoctor size="50" /> System Login
+              Health Care <FaUserDoctor size="50" /> System Login
             </h4>
           </div>
           <IonItem className="form">
             <IonLabel position="stacked">Enter email</IonLabel>
             <IonInput
-              type="text"
+              type="email"
               onInput={(e: any) => setEmail(e.target.value)}
               placeholder="Email"
             />
@@ -222,17 +332,17 @@ function Nav() {
           <IonItem className="form">
             <IonLabel position="stacked">Enter password</IonLabel>
             <IonInput
-              type="text"
+              type="password"
               onInput={(e: any) => setPassword(e.target.value)}
               placeholder="Password"
             />
           </IonItem>
           <IonButton
-            onClick={() => loginFunction()}
             className="ion-margin w-50"
             fill="outline"
             color="medium"
             shape="round"
+            onClick={() => loginFunction()}
           >
             <BiUser /> &nbsp; Sign In
           </IonButton>

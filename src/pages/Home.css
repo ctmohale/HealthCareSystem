@@ -18,6 +18,76 @@
     font-family: 'Montserrat', sans-serif;
 }
 
+.col-sm-3{
+
+    
+    
+    .card{
+        min-height: 400px !important;
+        border-bottom: 5px solid rgba(0, 0, 0, 0.479);
+        border-style: none;
+        border-radius: 20px;
+    }
+   
+}
+
+#main_dash{
+    background-color: rgba(1, 68, 107, 0.945);
+    padding: 2%;
+    border-radius: 20px;
+    .card-data{
+        background-color: rgba(1, 68, 107, 0.39);
+        border-radius: 20px;
+    }
+    .card-data:hover{
+        background-color: rgba(255, 255, 255, 0.11);
+        color: black !important;
+        border-radius: 20px;
+    }
+
+}
+
+#main_dash_doc{
+    background-color: rgb(92, 92, 92);
+    padding: 2%;
+    border-radius: 20px;
+    .card-data{
+        background-color: rgba(65, 65, 65, 0.39);
+        border-radius: 20px;
+    }
+    .card-data:hover{
+        background-color: rgba(255, 255, 255, 0.11);
+        color: black !important;
+        border-radius: 20px;
+    }
+}
+
+.col-sm-12 {
+    background-color: whitesmoke;
+    border-radius: 20px;
+}
+
+.p-column-header-content{
+    background-color: rgba(1, 68, 107, 0.877);
+    padding: 15px !important;
+    color: whitesmoke !important;
+
+}
+
+.col_rec{
+    padding: 10px !important;
+}
+
+
+.col_rec:hover{
+    padding: 10px !important;
+    background-color: rgba(1, 68, 107, 0.151);
+}
+
+.dataRowT{
+    border-style: none !important;
+}
+
 .main-title-sub{
     text-align: left;
     font-size: 60px;
@@ -25,6 +95,14 @@
          font-family: 'Comfortaa', cursive;
     font-family: 'Montserrat', sans-serif;
 
+}
+
+.list-group-item{
+    background-color:  rgba(1, 68, 107, 0.904);
+    border-style: none !important;
+    border-radius: 500px !important;
+    color: rgb(233, 233, 233);
+    border-bottom: 5px solid rgba(3, 50, 121, 0.315) !important;
 }
 
 .btn-register{
@@ -61,6 +139,11 @@
 
 .side_img{
     border-radius: 20px;
+}
+
+.modalP{
+    --width: 60% !important;
+    --height: 85% !important;
 }
 
 @media (max-width: 576px) { 
@@ -107,5 +190,6 @@
         padding: 5%;
         font-family: 'Comfortaa', cursive;
         font-family: 'Montserrat', sans-serif;
+
     }
 }

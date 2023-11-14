@@ -82,89 +82,11 @@ export type User = {
   id_number: string,
   cell_phone_no: string,
   access_type: string,
-  notification?: ModelNotificationConnection | null,
-  medicalReport?: ModelMedicalReportConnection | null,
-  biometricData?: ModelBiometricDataConnection | null,
-  governmentGrant?: GovernmentGrant | null,
+  biometricdata?: ModelBiometricDataConnection | null,
+  patient?: ModelPatientConnection | null,
+  appointment?: ModelAppointmentConnection | null,
   createdAt: string,
   updatedAt: string,
-};
-
-export type ModelNotificationConnection = {
-  __typename: "ModelNotificationConnection",
-  items:  Array<Notification | null >,
-  nextToken?: string | null,
-};
-
-export type Notification = {
-  __typename: "Notification",
-  id: string,
-  message: string,
-  user_id: string,
-  createdAt: string,
-  updatedAt: string,
-};
-
-export type ModelMedicalReportConnection = {
-  __typename: "ModelMedicalReportConnection",
-  items:  Array<MedicalReport | null >,
-  nextToken?: string | null,
-};
-
-export type MedicalReport = {
-  __typename: "MedicalReport",
-  id: string,
-  report_text?: string | null,
-  doctor_name?: string | null,
-  appointment_date?: string | null,
-  medical_report_status: string,
-  user_id: string,
-  hospital?: ModelHospitalConnection | null,
-  createdAt: string,
-  updatedAt: string,
-};
-
-export type ModelHospitalConnection = {
-  __typename: "ModelHospitalConnection",
-  items:  Array<Hospital | null >,
-  nextToken?: string | null,
-};
-
-export type Hospital = {
-  __typename: "Hospital",
-  id: string,
-  hospital_name: string,
-  address: string,
-  postal_code: string,
-  medical_report_id: string,
-  doctor?: ModelDoctorConnection | null,
-  createdAt: string,
-  updatedAt: string,
-};
-
-export type ModelDoctorConnection = {
-  __typename: "ModelDoctorConnection",
-  items:  Array<Doctor | null >,
-  nextToken?: string | null,
-};
-
-export type Doctor = {
-  __typename: "Doctor",
-  id: string,
-  first_name?: string | null,
-  last_name?: string | null,
-  specialization?: string | null,
-  contactInformation?: ContactInfo | null,
-  cell_no?: string | null,
-  hospital_id: string,
-  createdAt: string,
-  updatedAt: string,
-};
-
-export type ContactInfo = {
-  __typename: "ContactInfo",
-  email?: string | null,
-  phone?: string | null,
 };
 
 export type ModelBiometricDataConnection = {
@@ -178,22 +100,77 @@ export type BiometricData = {
   id: string,
   data: string,
   status: string,
-  user_id: string,
+  user_id?: string | null,
   createdAt: string,
   updatedAt: string,
 };
 
-export type GovernmentGrant = {
-  __typename: "GovernmentGrant",
+export type ModelPatientConnection = {
+  __typename: "ModelPatientConnection",
+  items:  Array<Patient | null >,
+  nextToken?: string | null,
+};
+
+export type Patient = {
+  __typename: "Patient",
   id: string,
-  grantName: string,
-  description?: string | null,
-  amount?: number | null,
-  startDate?: string | null,
-  endDate?: string | null,
-  applicationDeadline?: string | null,
-  eligibilityRequirements?: Array< string | null > | null,
-  applicationProcess?: string | null,
+  user_id?: string | null,
+  prescription?: ModelPrescriptionConnection | null,
+  medicalRecords?: ModelMedicalRecordsConnection | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type ModelPrescriptionConnection = {
+  __typename: "ModelPrescriptionConnection",
+  items:  Array<Prescription | null >,
+  nextToken?: string | null,
+};
+
+export type Prescription = {
+  __typename: "Prescription",
+  id: string,
+  patient_name: string,
+  medication_name: string,
+  dosage: string,
+  doctor_name: string,
+  patient_id?: string | null,
+  medical_doctor_id?: string | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type ModelMedicalRecordsConnection = {
+  __typename: "ModelMedicalRecordsConnection",
+  items:  Array<MedicalRecords | null >,
+  nextToken?: string | null,
+};
+
+export type MedicalRecords = {
+  __typename: "MedicalRecords",
+  id: string,
+  report_text: string,
+  doctor_name: string,
+  appointment_date: string,
+  medical_report_status: string,
+  patient_id?: string | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type ModelAppointmentConnection = {
+  __typename: "ModelAppointmentConnection",
+  items:  Array<Appointment | null >,
+  nextToken?: string | null,
+};
+
+export type Appointment = {
+  __typename: "Appointment",
+  id: string,
+  appointmentDate: string,
+  status: string,
+  notes?: string | null,
+  user_id?: string | null,
   createdAt: string,
   updatedAt: string,
 };
@@ -215,18 +192,20 @@ export type DeleteUserInput = {
   id: string,
 };
 
-export type CreateNotificationInput = {
+export type CreateBiometricDataInput = {
   id?: string | null,
-  message: string,
-  user_id: string,
+  data: string,
+  status: string,
+  user_id?: string | null,
 };
 
-export type ModelNotificationConditionInput = {
-  message?: ModelStringInput | null,
+export type ModelBiometricDataConditionInput = {
+  data?: ModelStringInput | null,
+  status?: ModelStringInput | null,
   user_id?: ModelIDInput | null,
-  and?: Array< ModelNotificationConditionInput | null > | null,
-  or?: Array< ModelNotificationConditionInput | null > | null,
-  not?: ModelNotificationConditionInput | null,
+  and?: Array< ModelBiometricDataConditionInput | null > | null,
+  or?: Array< ModelBiometricDataConditionInput | null > | null,
+  not?: ModelBiometricDataConditionInput | null,
 };
 
 export type ModelIDInput = {
@@ -245,32 +224,6 @@ export type ModelIDInput = {
   size?: ModelSizeInput | null,
 };
 
-export type UpdateNotificationInput = {
-  id: string,
-  message?: string | null,
-  user_id?: string | null,
-};
-
-export type DeleteNotificationInput = {
-  id: string,
-};
-
-export type CreateBiometricDataInput = {
-  id?: string | null,
-  data: string,
-  status: string,
-  user_id: string,
-};
-
-export type ModelBiometricDataConditionInput = {
-  data?: ModelStringInput | null,
-  status?: ModelStringInput | null,
-  user_id?: ModelIDInput | null,
-  and?: Array< ModelBiometricDataConditionInput | null > | null,
-  or?: Array< ModelBiometricDataConditionInput | null > | null,
-  not?: ModelBiometricDataConditionInput | null,
-};
-
 export type UpdateBiometricDataInput = {
   id: string,
   data?: string | null,
@@ -282,81 +235,132 @@ export type DeleteBiometricDataInput = {
   id: string,
 };
 
-export type CreateMedicalReportInput = {
+export type CreateAppointmentInput = {
   id?: string | null,
-  report_text?: string | null,
-  doctor_name?: string | null,
-  appointment_date?: string | null,
-  medical_report_status: string,
-  user_id: string,
+  appointmentDate: string,
+  status: string,
+  notes?: string | null,
+  user_id?: string | null,
 };
 
-export type ModelMedicalReportConditionInput = {
+export type ModelAppointmentConditionInput = {
+  appointmentDate?: ModelStringInput | null,
+  status?: ModelStringInput | null,
+  notes?: ModelStringInput | null,
+  user_id?: ModelIDInput | null,
+  and?: Array< ModelAppointmentConditionInput | null > | null,
+  or?: Array< ModelAppointmentConditionInput | null > | null,
+  not?: ModelAppointmentConditionInput | null,
+};
+
+export type UpdateAppointmentInput = {
+  id: string,
+  appointmentDate?: string | null,
+  status?: string | null,
+  notes?: string | null,
+  user_id?: string | null,
+};
+
+export type DeleteAppointmentInput = {
+  id: string,
+};
+
+export type CreateAdminInput = {
+  id?: string | null,
+  name: string,
+  surname: string,
+  email: string,
+  password: string,
+  access_type?: string | null,
+};
+
+export type ModelAdminConditionInput = {
+  name?: ModelStringInput | null,
+  surname?: ModelStringInput | null,
+  email?: ModelStringInput | null,
+  password?: ModelStringInput | null,
+  access_type?: ModelStringInput | null,
+  and?: Array< ModelAdminConditionInput | null > | null,
+  or?: Array< ModelAdminConditionInput | null > | null,
+  not?: ModelAdminConditionInput | null,
+};
+
+export type Admin = {
+  __typename: "Admin",
+  id: string,
+  name: string,
+  surname: string,
+  email: string,
+  password: string,
+  access_type?: string | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type UpdateAdminInput = {
+  id: string,
+  name?: string | null,
+  surname?: string | null,
+  email?: string | null,
+  password?: string | null,
+  access_type?: string | null,
+};
+
+export type DeleteAdminInput = {
+  id: string,
+};
+
+export type CreateMedicalRecordsInput = {
+  id?: string | null,
+  report_text: string,
+  doctor_name: string,
+  appointment_date: string,
+  medical_report_status: string,
+  patient_id?: string | null,
+};
+
+export type ModelMedicalRecordsConditionInput = {
   report_text?: ModelStringInput | null,
   doctor_name?: ModelStringInput | null,
   appointment_date?: ModelStringInput | null,
   medical_report_status?: ModelStringInput | null,
-  user_id?: ModelIDInput | null,
-  and?: Array< ModelMedicalReportConditionInput | null > | null,
-  or?: Array< ModelMedicalReportConditionInput | null > | null,
-  not?: ModelMedicalReportConditionInput | null,
+  patient_id?: ModelIDInput | null,
+  and?: Array< ModelMedicalRecordsConditionInput | null > | null,
+  or?: Array< ModelMedicalRecordsConditionInput | null > | null,
+  not?: ModelMedicalRecordsConditionInput | null,
 };
 
-export type UpdateMedicalReportInput = {
+export type UpdateMedicalRecordsInput = {
   id: string,
   report_text?: string | null,
   doctor_name?: string | null,
   appointment_date?: string | null,
   medical_report_status?: string | null,
-  user_id?: string | null,
+  patient_id?: string | null,
 };
 
-export type DeleteMedicalReportInput = {
+export type DeleteMedicalRecordsInput = {
   id: string,
 };
 
-export type CreateMedicalHistoryInput = {
+export type CreatePatientInput = {
   id?: string | null,
-  condition?: string | null,
-  allergies?: string | null,
-  surgeries?: string | null,
-  medications?: string | null,
-  user_id: string,
-};
-
-export type ModelMedicalHistoryConditionInput = {
-  condition?: ModelStringInput | null,
-  allergies?: ModelStringInput | null,
-  surgeries?: ModelStringInput | null,
-  medications?: ModelStringInput | null,
-  user_id?: ModelIDInput | null,
-  and?: Array< ModelMedicalHistoryConditionInput | null > | null,
-  or?: Array< ModelMedicalHistoryConditionInput | null > | null,
-  not?: ModelMedicalHistoryConditionInput | null,
-};
-
-export type MedicalHistory = {
-  __typename: "MedicalHistory",
-  id: string,
-  condition?: string | null,
-  allergies?: string | null,
-  surgeries?: string | null,
-  medications?: string | null,
-  user_id: string,
-  createdAt: string,
-  updatedAt: string,
-};
-
-export type UpdateMedicalHistoryInput = {
-  id: string,
-  condition?: string | null,
-  allergies?: string | null,
-  surgeries?: string | null,
-  medications?: string | null,
   user_id?: string | null,
 };
 
-export type DeleteMedicalHistoryInput = {
+export type ModelPatientConditionInput = {
+  user_id?: ModelIDInput | null,
+  and?: Array< ModelPatientConditionInput | null > | null,
+  or?: Array< ModelPatientConditionInput | null > | null,
+  not?: ModelPatientConditionInput | null,
+};
+
+export type UpdatePatientInput = {
+  id: string,
+  user_id?: string | null,
+};
+
+export type DeletePatientInput = {
   id: string,
 };
 
@@ -365,17 +369,80 @@ export type CreateHospitalInput = {
   hospital_name: string,
   address: string,
   postal_code: string,
-  medical_report_id: string,
 };
 
 export type ModelHospitalConditionInput = {
   hospital_name?: ModelStringInput | null,
   address?: ModelStringInput | null,
   postal_code?: ModelStringInput | null,
-  medical_report_id?: ModelIDInput | null,
   and?: Array< ModelHospitalConditionInput | null > | null,
   or?: Array< ModelHospitalConditionInput | null > | null,
   not?: ModelHospitalConditionInput | null,
+};
+
+export type Hospital = {
+  __typename: "Hospital",
+  id: string,
+  hospital_name: string,
+  address: string,
+  postal_code: string,
+  medicalDoctor?: ModelMedicalDoctorConnection | null,
+  departmentOfHomeAffairs?: ModelDepartmentOfHomeAffairsConnection | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type ModelMedicalDoctorConnection = {
+  __typename: "ModelMedicalDoctorConnection",
+  items:  Array<MedicalDoctor | null >,
+  nextToken?: string | null,
+};
+
+export type MedicalDoctor = {
+  __typename: "MedicalDoctor",
+  id: string,
+  first_name: string,
+  last_name: string,
+  specialization: string,
+  email: string,
+  password: string,
+  phone: string,
+  access_type?: string | null,
+  hospital_id?: string | null,
+  prescription?: ModelPrescriptionConnection | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type ModelDepartmentOfHomeAffairsConnection = {
+  __typename: "ModelDepartmentOfHomeAffairsConnection",
+  items:  Array<DepartmentOfHomeAffairs | null >,
+  nextToken?: string | null,
+};
+
+export type DepartmentOfHomeAffairs = {
+  __typename: "DepartmentOfHomeAffairs",
+  hospital_id?: string | null,
+  name: string,
+  surname: string,
+  address: string,
+  postal_code: string,
+  id_number: string,
+  cell_phone_no?: string | null,
+  race: string,
+  date_of_birth?: string | null,
+  gender?: string | null,
+  nationality?: string | null,
+  email?: string | null,
+  marital_status?: string | null,
+  citizenship_status?: string | null,
+  photo_url?: string | null,
+  notes?: string | null,
+  emergency_contact_name?: string | null,
+  emergency_contact_phone?: string | null,
+  id: string,
+  createdAt: string,
+  updatedAt: string,
 };
 
 export type UpdateHospitalInput = {
@@ -383,104 +450,159 @@ export type UpdateHospitalInput = {
   hospital_name?: string | null,
   address?: string | null,
   postal_code?: string | null,
-  medical_report_id?: string | null,
 };
 
 export type DeleteHospitalInput = {
   id: string,
 };
 
-export type CreateDoctorInput = {
+export type CreatePrescriptionInput = {
   id?: string | null,
-  first_name?: string | null,
-  last_name?: string | null,
-  specialization?: string | null,
-  contactInformation?: ContactInfoInput | null,
-  cell_no?: string | null,
-  hospital_id: string,
+  patient_name: string,
+  medication_name: string,
+  dosage: string,
+  doctor_name: string,
+  patient_id?: string | null,
+  medical_doctor_id?: string | null,
 };
 
-export type ContactInfoInput = {
-  email?: string | null,
-  phone?: string | null,
+export type ModelPrescriptionConditionInput = {
+  patient_name?: ModelStringInput | null,
+  medication_name?: ModelStringInput | null,
+  dosage?: ModelStringInput | null,
+  doctor_name?: ModelStringInput | null,
+  patient_id?: ModelIDInput | null,
+  medical_doctor_id?: ModelIDInput | null,
+  and?: Array< ModelPrescriptionConditionInput | null > | null,
+  or?: Array< ModelPrescriptionConditionInput | null > | null,
+  not?: ModelPrescriptionConditionInput | null,
 };
 
-export type ModelDoctorConditionInput = {
-  first_name?: ModelStringInput | null,
-  last_name?: ModelStringInput | null,
-  specialization?: ModelStringInput | null,
-  cell_no?: ModelStringInput | null,
-  hospital_id?: ModelIDInput | null,
-  and?: Array< ModelDoctorConditionInput | null > | null,
-  or?: Array< ModelDoctorConditionInput | null > | null,
-  not?: ModelDoctorConditionInput | null,
-};
-
-export type UpdateDoctorInput = {
+export type UpdatePrescriptionInput = {
   id: string,
-  first_name?: string | null,
-  last_name?: string | null,
-  specialization?: string | null,
-  contactInformation?: ContactInfoInput | null,
-  cell_no?: string | null,
+  patient_name?: string | null,
+  medication_name?: string | null,
+  dosage?: string | null,
+  doctor_name?: string | null,
+  patient_id?: string | null,
+  medical_doctor_id?: string | null,
+};
+
+export type DeletePrescriptionInput = {
+  id: string,
+};
+
+export type CreateMedicalDoctorInput = {
+  id?: string | null,
+  first_name: string,
+  last_name: string,
+  specialization: string,
+  email: string,
+  password: string,
+  phone: string,
+  access_type?: string | null,
   hospital_id?: string | null,
 };
 
-export type DeleteDoctorInput = {
+export type ModelMedicalDoctorConditionInput = {
+  first_name?: ModelStringInput | null,
+  last_name?: ModelStringInput | null,
+  specialization?: ModelStringInput | null,
+  email?: ModelStringInput | null,
+  password?: ModelStringInput | null,
+  phone?: ModelStringInput | null,
+  access_type?: ModelStringInput | null,
+  hospital_id?: ModelIDInput | null,
+  and?: Array< ModelMedicalDoctorConditionInput | null > | null,
+  or?: Array< ModelMedicalDoctorConditionInput | null > | null,
+  not?: ModelMedicalDoctorConditionInput | null,
+};
+
+export type UpdateMedicalDoctorInput = {
+  id: string,
+  first_name?: string | null,
+  last_name?: string | null,
+  specialization?: string | null,
+  email?: string | null,
+  password?: string | null,
+  phone?: string | null,
+  access_type?: string | null,
+  hospital_id?: string | null,
+};
+
+export type DeleteMedicalDoctorInput = {
   id: string,
 };
 
-export type CreateGovernmentGrantInput = {
+export type CreateDepartmentOfHomeAffairsInput = {
+  hospital_id?: string | null,
+  name: string,
+  surname: string,
+  address: string,
+  postal_code: string,
+  id_number: string,
+  cell_phone_no?: string | null,
+  race: string,
+  date_of_birth?: string | null,
+  gender?: string | null,
+  nationality?: string | null,
+  email?: string | null,
+  marital_status?: string | null,
+  citizenship_status?: string | null,
+  photo_url?: string | null,
+  notes?: string | null,
+  emergency_contact_name?: string | null,
+  emergency_contact_phone?: string | null,
   id?: string | null,
-  grantName: string,
-  description?: string | null,
-  amount?: number | null,
-  startDate?: string | null,
-  endDate?: string | null,
-  applicationDeadline?: string | null,
-  eligibilityRequirements?: Array< string | null > | null,
-  applicationProcess?: string | null,
 };
 
-export type ModelGovernmentGrantConditionInput = {
-  grantName?: ModelStringInput | null,
-  description?: ModelStringInput | null,
-  amount?: ModelFloatInput | null,
-  startDate?: ModelStringInput | null,
-  endDate?: ModelStringInput | null,
-  applicationDeadline?: ModelStringInput | null,
-  eligibilityRequirements?: ModelStringInput | null,
-  applicationProcess?: ModelStringInput | null,
-  and?: Array< ModelGovernmentGrantConditionInput | null > | null,
-  or?: Array< ModelGovernmentGrantConditionInput | null > | null,
-  not?: ModelGovernmentGrantConditionInput | null,
+export type ModelDepartmentOfHomeAffairsConditionInput = {
+  hospital_id?: ModelIDInput | null,
+  name?: ModelStringInput | null,
+  surname?: ModelStringInput | null,
+  address?: ModelStringInput | null,
+  postal_code?: ModelStringInput | null,
+  id_number?: ModelStringInput | null,
+  cell_phone_no?: ModelStringInput | null,
+  race?: ModelStringInput | null,
+  date_of_birth?: ModelStringInput | null,
+  gender?: ModelStringInput | null,
+  nationality?: ModelStringInput | null,
+  email?: ModelStringInput | null,
+  marital_status?: ModelStringInput | null,
+  citizenship_status?: ModelStringInput | null,
+  photo_url?: ModelStringInput | null,
+  notes?: ModelStringInput | null,
+  emergency_contact_name?: ModelStringInput | null,
+  emergency_contact_phone?: ModelStringInput | null,
+  and?: Array< ModelDepartmentOfHomeAffairsConditionInput | null > | null,
+  or?: Array< ModelDepartmentOfHomeAffairsConditionInput | null > | null,
+  not?: ModelDepartmentOfHomeAffairsConditionInput | null,
 };
 
-export type ModelFloatInput = {
-  ne?: number | null,
-  eq?: number | null,
-  le?: number | null,
-  lt?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  between?: Array< number | null > | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
-};
-
-export type UpdateGovernmentGrantInput = {
+export type UpdateDepartmentOfHomeAffairsInput = {
+  hospital_id?: string | null,
+  name?: string | null,
+  surname?: string | null,
+  address?: string | null,
+  postal_code?: string | null,
+  id_number?: string | null,
+  cell_phone_no?: string | null,
+  race?: string | null,
+  date_of_birth?: string | null,
+  gender?: string | null,
+  nationality?: string | null,
+  email?: string | null,
+  marital_status?: string | null,
+  citizenship_status?: string | null,
+  photo_url?: string | null,
+  notes?: string | null,
+  emergency_contact_name?: string | null,
+  emergency_contact_phone?: string | null,
   id: string,
-  grantName?: string | null,
-  description?: string | null,
-  amount?: number | null,
-  startDate?: string | null,
-  endDate?: string | null,
-  applicationDeadline?: string | null,
-  eligibilityRequirements?: Array< string | null > | null,
-  applicationProcess?: string | null,
 };
 
-export type DeleteGovernmentGrantInput = {
+export type DeleteDepartmentOfHomeAffairsInput = {
   id: string,
 };
 
@@ -506,15 +628,6 @@ export type ModelUserConnection = {
   nextToken?: string | null,
 };
 
-export type ModelNotificationFilterInput = {
-  id?: ModelIDInput | null,
-  message?: ModelStringInput | null,
-  user_id?: ModelIDInput | null,
-  and?: Array< ModelNotificationFilterInput | null > | null,
-  or?: Array< ModelNotificationFilterInput | null > | null,
-  not?: ModelNotificationFilterInput | null,
-};
-
 export type ModelBiometricDataFilterInput = {
   id?: ModelIDInput | null,
   data?: ModelStringInput | null,
@@ -525,34 +638,53 @@ export type ModelBiometricDataFilterInput = {
   not?: ModelBiometricDataFilterInput | null,
 };
 
-export type ModelMedicalReportFilterInput = {
+export type ModelAppointmentFilterInput = {
+  id?: ModelIDInput | null,
+  appointmentDate?: ModelStringInput | null,
+  status?: ModelStringInput | null,
+  notes?: ModelStringInput | null,
+  user_id?: ModelIDInput | null,
+  and?: Array< ModelAppointmentFilterInput | null > | null,
+  or?: Array< ModelAppointmentFilterInput | null > | null,
+  not?: ModelAppointmentFilterInput | null,
+};
+
+export type ModelAdminFilterInput = {
+  id?: ModelIDInput | null,
+  name?: ModelStringInput | null,
+  surname?: ModelStringInput | null,
+  email?: ModelStringInput | null,
+  password?: ModelStringInput | null,
+  access_type?: ModelStringInput | null,
+  and?: Array< ModelAdminFilterInput | null > | null,
+  or?: Array< ModelAdminFilterInput | null > | null,
+  not?: ModelAdminFilterInput | null,
+};
+
+export type ModelAdminConnection = {
+  __typename: "ModelAdminConnection",
+  items:  Array<Admin | null >,
+  nextToken?: string | null,
+};
+
+export type ModelMedicalRecordsFilterInput = {
   id?: ModelIDInput | null,
   report_text?: ModelStringInput | null,
   doctor_name?: ModelStringInput | null,
   appointment_date?: ModelStringInput | null,
   medical_report_status?: ModelStringInput | null,
-  user_id?: ModelIDInput | null,
-  and?: Array< ModelMedicalReportFilterInput | null > | null,
-  or?: Array< ModelMedicalReportFilterInput | null > | null,
-  not?: ModelMedicalReportFilterInput | null,
+  patient_id?: ModelIDInput | null,
+  and?: Array< ModelMedicalRecordsFilterInput | null > | null,
+  or?: Array< ModelMedicalRecordsFilterInput | null > | null,
+  not?: ModelMedicalRecordsFilterInput | null,
 };
 
-export type ModelMedicalHistoryFilterInput = {
+export type ModelPatientFilterInput = {
   id?: ModelIDInput | null,
-  condition?: ModelStringInput | null,
-  allergies?: ModelStringInput | null,
-  surgeries?: ModelStringInput | null,
-  medications?: ModelStringInput | null,
   user_id?: ModelIDInput | null,
-  and?: Array< ModelMedicalHistoryFilterInput | null > | null,
-  or?: Array< ModelMedicalHistoryFilterInput | null > | null,
-  not?: ModelMedicalHistoryFilterInput | null,
-};
-
-export type ModelMedicalHistoryConnection = {
-  __typename: "ModelMedicalHistoryConnection",
-  items:  Array<MedicalHistory | null >,
-  nextToken?: string | null,
+  and?: Array< ModelPatientFilterInput | null > | null,
+  or?: Array< ModelPatientFilterInput | null > | null,
+  not?: ModelPatientFilterInput | null,
 };
 
 export type ModelHospitalFilterInput = {
@@ -560,43 +692,67 @@ export type ModelHospitalFilterInput = {
   hospital_name?: ModelStringInput | null,
   address?: ModelStringInput | null,
   postal_code?: ModelStringInput | null,
-  medical_report_id?: ModelIDInput | null,
   and?: Array< ModelHospitalFilterInput | null > | null,
   or?: Array< ModelHospitalFilterInput | null > | null,
   not?: ModelHospitalFilterInput | null,
 };
 
-export type ModelDoctorFilterInput = {
+export type ModelHospitalConnection = {
+  __typename: "ModelHospitalConnection",
+  items:  Array<Hospital | null >,
+  nextToken?: string | null,
+};
+
+export type ModelPrescriptionFilterInput = {
+  id?: ModelIDInput | null,
+  patient_name?: ModelStringInput | null,
+  medication_name?: ModelStringInput | null,
+  dosage?: ModelStringInput | null,
+  doctor_name?: ModelStringInput | null,
+  patient_id?: ModelIDInput | null,
+  medical_doctor_id?: ModelIDInput | null,
+  and?: Array< ModelPrescriptionFilterInput | null > | null,
+  or?: Array< ModelPrescriptionFilterInput | null > | null,
+  not?: ModelPrescriptionFilterInput | null,
+};
+
+export type ModelMedicalDoctorFilterInput = {
   id?: ModelIDInput | null,
   first_name?: ModelStringInput | null,
   last_name?: ModelStringInput | null,
   specialization?: ModelStringInput | null,
-  cell_no?: ModelStringInput | null,
+  email?: ModelStringInput | null,
+  password?: ModelStringInput | null,
+  phone?: ModelStringInput | null,
+  access_type?: ModelStringInput | null,
   hospital_id?: ModelIDInput | null,
-  and?: Array< ModelDoctorFilterInput | null > | null,
-  or?: Array< ModelDoctorFilterInput | null > | null,
-  not?: ModelDoctorFilterInput | null,
+  and?: Array< ModelMedicalDoctorFilterInput | null > | null,
+  or?: Array< ModelMedicalDoctorFilterInput | null > | null,
+  not?: ModelMedicalDoctorFilterInput | null,
 };
 
-export type ModelGovernmentGrantFilterInput = {
-  id?: ModelIDInput | null,
-  grantName?: ModelStringInput | null,
-  description?: ModelStringInput | null,
-  amount?: ModelFloatInput | null,
-  startDate?: ModelStringInput | null,
-  endDate?: ModelStringInput | null,
-  applicationDeadline?: ModelStringInput | null,
-  eligibilityRequirements?: ModelStringInput | null,
-  applicationProcess?: ModelStringInput | null,
-  and?: Array< ModelGovernmentGrantFilterInput | null > | null,
-  or?: Array< ModelGovernmentGrantFilterInput | null > | null,
-  not?: ModelGovernmentGrantFilterInput | null,
-};
-
-export type ModelGovernmentGrantConnection = {
-  __typename: "ModelGovernmentGrantConnection",
-  items:  Array<GovernmentGrant | null >,
-  nextToken?: string | null,
+export type ModelDepartmentOfHomeAffairsFilterInput = {
+  hospital_id?: ModelIDInput | null,
+  name?: ModelStringInput | null,
+  surname?: ModelStringInput | null,
+  address?: ModelStringInput | null,
+  postal_code?: ModelStringInput | null,
+  id_number?: ModelStringInput | null,
+  cell_phone_no?: ModelStringInput | null,
+  race?: ModelStringInput | null,
+  date_of_birth?: ModelStringInput | null,
+  gender?: ModelStringInput | null,
+  nationality?: ModelStringInput | null,
+  email?: ModelStringInput | null,
+  marital_status?: ModelStringInput | null,
+  citizenship_status?: ModelStringInput | null,
+  photo_url?: ModelStringInput | null,
+  notes?: ModelStringInput | null,
+  emergency_contact_name?: ModelStringInput | null,
+  emergency_contact_phone?: ModelStringInput | null,
+  and?: Array< ModelDepartmentOfHomeAffairsFilterInput | null > | null,
+  or?: Array< ModelDepartmentOfHomeAffairsFilterInput | null > | null,
+  not?: ModelDepartmentOfHomeAffairsFilterInput | null,
 };
 
 export enum ModelSortDirection {
@@ -650,14 +806,6 @@ export type ModelSubscriptionStringInput = {
   notIn?: Array< string | null > | null,
 };
 
-export type ModelSubscriptionNotificationFilterInput = {
-  id?: ModelSubscriptionIDInput | null,
-  message?: ModelSubscriptionStringInput | null,
-  user_id?: ModelSubscriptionIDInput | null,
-  and?: Array< ModelSubscriptionNotificationFilterInput | null > | null,
-  or?: Array< ModelSubscriptionNotificationFilterInput | null > | null,
-};
-
 export type ModelSubscriptionBiometricDataFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   data?: ModelSubscriptionStringInput | null,
@@ -667,26 +815,43 @@ export type ModelSubscriptionBiometricDataFilterInput = {
   or?: Array< ModelSubscriptionBiometricDataFilterInput | null > | null,
 };
 
-export type ModelSubscriptionMedicalReportFilterInput = {
+export type ModelSubscriptionAppointmentFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  appointmentDate?: ModelSubscriptionStringInput | null,
+  status?: ModelSubscriptionStringInput | null,
+  notes?: ModelSubscriptionStringInput | null,
+  user_id?: ModelSubscriptionIDInput | null,
+  and?: Array< ModelSubscriptionAppointmentFilterInput | null > | null,
+  or?: Array< ModelSubscriptionAppointmentFilterInput | null > | null,
+};
+
+export type ModelSubscriptionAdminFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  name?: ModelSubscriptionStringInput | null,
+  surname?: ModelSubscriptionStringInput | null,
+  email?: ModelSubscriptionStringInput | null,
+  password?: ModelSubscriptionStringInput | null,
+  access_type?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionAdminFilterInput | null > | null,
+  or?: Array< ModelSubscriptionAdminFilterInput | null > | null,
+};
+
+export type ModelSubscriptionMedicalRecordsFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   report_text?: ModelSubscriptionStringInput | null,
   doctor_name?: ModelSubscriptionStringInput | null,
   appointment_date?: ModelSubscriptionStringInput | null,
   medical_report_status?: ModelSubscriptionStringInput | null,
-  user_id?: ModelSubscriptionIDInput | null,
-  and?: Array< ModelSubscriptionMedicalReportFilterInput | null > | null,
-  or?: Array< ModelSubscriptionMedicalReportFilterInput | null > | null,
+  patient_id?: ModelSubscriptionIDInput | null,
+  and?: Array< ModelSubscriptionMedicalRecordsFilterInput | null > | null,
+  or?: Array< ModelSubscriptionMedicalRecordsFilterInput | null > | null,
 };
 
-export type ModelSubscriptionMedicalHistoryFilterInput = {
+export type ModelSubscriptionPatientFilterInput = {
   id?: ModelSubscriptionIDInput | null,
-  condition?: ModelSubscriptionStringInput | null,
-  allergies?: ModelSubscriptionStringInput | null,
-  surgeries?: ModelSubscriptionStringInput | null,
-  medications?: ModelSubscriptionStringInput | null,
   user_id?: ModelSubscriptionIDInput | null,
-  and?: Array< ModelSubscriptionMedicalHistoryFilterInput | null > | null,
-  or?: Array< ModelSubscriptionMedicalHistoryFilterInput | null > | null,
+  and?: Array< ModelSubscriptionPatientFilterInput | null > | null,
+  or?: Array< ModelSubscriptionPatientFilterInput | null > | null,
 };
 
 export type ModelSubscriptionHospitalFilterInput = {
@@ -694,46 +859,57 @@ export type ModelSubscriptionHospitalFilterInput = {
   hospital_name?: ModelSubscriptionStringInput | null,
   address?: ModelSubscriptionStringInput | null,
   postal_code?: ModelSubscriptionStringInput | null,
-  medical_report_id?: ModelSubscriptionIDInput | null,
   and?: Array< ModelSubscriptionHospitalFilterInput | null > | null,
   or?: Array< ModelSubscriptionHospitalFilterInput | null > | null,
 };
 
-export type ModelSubscriptionDoctorFilterInput = {
+export type ModelSubscriptionPrescriptionFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  patient_name?: ModelSubscriptionStringInput | null,
+  medication_name?: ModelSubscriptionStringInput | null,
+  dosage?: ModelSubscriptionStringInput | null,
+  doctor_name?: ModelSubscriptionStringInput | null,
+  patient_id?: ModelSubscriptionIDInput | null,
+  medical_doctor_id?: ModelSubscriptionIDInput | null,
+  and?: Array< ModelSubscriptionPrescriptionFilterInput | null > | null,
+  or?: Array< ModelSubscriptionPrescriptionFilterInput | null > | null,
+};
+
+export type ModelSubscriptionMedicalDoctorFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   first_name?: ModelSubscriptionStringInput | null,
   last_name?: ModelSubscriptionStringInput | null,
   specialization?: ModelSubscriptionStringInput | null,
-  cell_no?: ModelSubscriptionStringInput | null,
+  email?: ModelSubscriptionStringInput | null,
+  password?: ModelSubscriptionStringInput | null,
+  phone?: ModelSubscriptionStringInput | null,
+  access_type?: ModelSubscriptionStringInput | null,
   hospital_id?: ModelSubscriptionIDInput | null,
-  and?: Array< ModelSubscriptionDoctorFilterInput | null > | null,
-  or?: Array< ModelSubscriptionDoctorFilterInput | null > | null,
+  and?: Array< ModelSubscriptionMedicalDoctorFilterInput | null > | null,
+  or?: Array< ModelSubscriptionMedicalDoctorFilterInput | null > | null,
 };
 
-export type ModelSubscriptionGovernmentGrantFilterInput = {
-  id?: ModelSubscriptionIDInput | null,
-  grantName?: ModelSubscriptionStringInput | null,
-  description?: ModelSubscriptionStringInput | null,
-  amount?: ModelSubscriptionFloatInput | null,
-  startDate?: ModelSubscriptionStringInput | null,
-  endDate?: ModelSubscriptionStringInput | null,
-  applicationDeadline?: ModelSubscriptionStringInput | null,
-  eligibilityRequirements?: ModelSubscriptionStringInput | null,
-  applicationProcess?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionGovernmentGrantFilterInput | null > | null,
-  or?: Array< ModelSubscriptionGovernmentGrantFilterInput | null > | null,
-};
-
-export type ModelSubscriptionFloatInput = {
-  ne?: number | null,
-  eq?: number | null,
-  le?: number | null,
-  lt?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  between?: Array< number | null > | null,
-  in?: Array< number | null > | null,
-  notIn?: Array< number | null > | null,
+export type ModelSubscriptionDepartmentOfHomeAffairsFilterInput = {
+  hospital_id?: ModelSubscriptionIDInput | null,
+  name?: ModelSubscriptionStringInput | null,
+  surname?: ModelSubscriptionStringInput | null,
+  address?: ModelSubscriptionStringInput | null,
+  postal_code?: ModelSubscriptionStringInput | null,
+  id_number?: ModelSubscriptionStringInput | null,
+  cell_phone_no?: ModelSubscriptionStringInput | null,
+  race?: ModelSubscriptionStringInput | null,
+  date_of_birth?: ModelSubscriptionStringInput | null,
+  gender?: ModelSubscriptionStringInput | null,
+  nationality?: ModelSubscriptionStringInput | null,
+  email?: ModelSubscriptionStringInput | null,
+  marital_status?: ModelSubscriptionStringInput | null,
+  citizenship_status?: ModelSubscriptionStringInput | null,
+  photo_url?: ModelSubscriptionStringInput | null,
+  notes?: ModelSubscriptionStringInput | null,
+  emergency_contact_name?: ModelSubscriptionStringInput | null,
+  emergency_contact_phone?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionDepartmentOfHomeAffairsFilterInput | null > | null,
+  or?: Array< ModelSubscriptionDepartmentOfHomeAffairsFilterInput | null > | null,
 };
 
 export type CreateUserMutationVariables = {
@@ -754,59 +930,43 @@ export type CreateUserMutation = {
     id_number: string,
     cell_phone_no: string,
     access_type: string,
-    notification?:  {
-      __typename: "ModelNotificationConnection",
-      items:  Array< {
-        __typename: "Notification",
-        id: string,
-        message: string,
-        user_id: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
-    medicalReport?:  {
-      __typename: "ModelMedicalReportConnection",
-      items:  Array< {
-        __typename: "MedicalReport",
-        id: string,
-        report_text?: string | null,
-        doctor_name?: string | null,
-        appointment_date?: string | null,
-        medical_report_status: string,
-        user_id: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
-    biometricData?:  {
+    biometricdata?:  {
       __typename: "ModelBiometricDataConnection",
       items:  Array< {
         __typename: "BiometricData",
         id: string,
         data: string,
         status: string,
-        user_id: string,
+        user_id?: string | null,
         createdAt: string,
         updatedAt: string,
       } | null >,
       nextToken?: string | null,
     } | null,
-    governmentGrant?:  {
-      __typename: "GovernmentGrant",
-      id: string,
-      grantName: string,
-      description?: string | null,
-      amount?: number | null,
-      startDate?: string | null,
-      endDate?: string | null,
-      applicationDeadline?: string | null,
-      eligibilityRequirements?: Array< string | null > | null,
-      applicationProcess?: string | null,
-      createdAt: string,
-      updatedAt: string,
+    patient?:  {
+      __typename: "ModelPatientConnection",
+      items:  Array< {
+        __typename: "Patient",
+        id: string,
+        user_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    appointment?:  {
+      __typename: "ModelAppointmentConnection",
+      items:  Array< {
+        __typename: "Appointment",
+        id: string,
+        appointmentDate: string,
+        status: string,
+        notes?: string | null,
+        user_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
@@ -831,59 +991,43 @@ export type UpdateUserMutation = {
     id_number: string,
     cell_phone_no: string,
     access_type: string,
-    notification?:  {
-      __typename: "ModelNotificationConnection",
-      items:  Array< {
-        __typename: "Notification",
-        id: string,
-        message: string,
-        user_id: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
-    medicalReport?:  {
-      __typename: "ModelMedicalReportConnection",
-      items:  Array< {
-        __typename: "MedicalReport",
-        id: string,
-        report_text?: string | null,
-        doctor_name?: string | null,
-        appointment_date?: string | null,
-        medical_report_status: string,
-        user_id: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
-    biometricData?:  {
+    biometricdata?:  {
       __typename: "ModelBiometricDataConnection",
       items:  Array< {
         __typename: "BiometricData",
         id: string,
         data: string,
         status: string,
-        user_id: string,
+        user_id?: string | null,
         createdAt: string,
         updatedAt: string,
       } | null >,
       nextToken?: string | null,
     } | null,
-    governmentGrant?:  {
-      __typename: "GovernmentGrant",
-      id: string,
-      grantName: string,
-      description?: string | null,
-      amount?: number | null,
-      startDate?: string | null,
-      endDate?: string | null,
-      applicationDeadline?: string | null,
-      eligibilityRequirements?: Array< string | null > | null,
-      applicationProcess?: string | null,
-      createdAt: string,
-      updatedAt: string,
+    patient?:  {
+      __typename: "ModelPatientConnection",
+      items:  Array< {
+        __typename: "Patient",
+        id: string,
+        user_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    appointment?:  {
+      __typename: "ModelAppointmentConnection",
+      items:  Array< {
+        __typename: "Appointment",
+        id: string,
+        appointmentDate: string,
+        status: string,
+        notes?: string | null,
+        user_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
@@ -908,108 +1052,44 @@ export type DeleteUserMutation = {
     id_number: string,
     cell_phone_no: string,
     access_type: string,
-    notification?:  {
-      __typename: "ModelNotificationConnection",
-      items:  Array< {
-        __typename: "Notification",
-        id: string,
-        message: string,
-        user_id: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
-    medicalReport?:  {
-      __typename: "ModelMedicalReportConnection",
-      items:  Array< {
-        __typename: "MedicalReport",
-        id: string,
-        report_text?: string | null,
-        doctor_name?: string | null,
-        appointment_date?: string | null,
-        medical_report_status: string,
-        user_id: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
-    biometricData?:  {
+    biometricdata?:  {
       __typename: "ModelBiometricDataConnection",
       items:  Array< {
         __typename: "BiometricData",
         id: string,
         data: string,
         status: string,
-        user_id: string,
+        user_id?: string | null,
         createdAt: string,
         updatedAt: string,
       } | null >,
       nextToken?: string | null,
     } | null,
-    governmentGrant?:  {
-      __typename: "GovernmentGrant",
-      id: string,
-      grantName: string,
-      description?: string | null,
-      amount?: number | null,
-      startDate?: string | null,
-      endDate?: string | null,
-      applicationDeadline?: string | null,
-      eligibilityRequirements?: Array< string | null > | null,
-      applicationProcess?: string | null,
-      createdAt: string,
-      updatedAt: string,
+    patient?:  {
+      __typename: "ModelPatientConnection",
+      items:  Array< {
+        __typename: "Patient",
+        id: string,
+        user_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
     } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type CreateNotificationMutationVariables = {
-  input: CreateNotificationInput,
-  condition?: ModelNotificationConditionInput | null,
-};
-
-export type CreateNotificationMutation = {
-  createNotification?:  {
-    __typename: "Notification",
-    id: string,
-    message: string,
-    user_id: string,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type UpdateNotificationMutationVariables = {
-  input: UpdateNotificationInput,
-  condition?: ModelNotificationConditionInput | null,
-};
-
-export type UpdateNotificationMutation = {
-  updateNotification?:  {
-    __typename: "Notification",
-    id: string,
-    message: string,
-    user_id: string,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type DeleteNotificationMutationVariables = {
-  input: DeleteNotificationInput,
-  condition?: ModelNotificationConditionInput | null,
-};
-
-export type DeleteNotificationMutation = {
-  deleteNotification?:  {
-    __typename: "Notification",
-    id: string,
-    message: string,
-    user_id: string,
+    appointment?:  {
+      __typename: "ModelAppointmentConnection",
+      items:  Array< {
+        __typename: "Appointment",
+        id: string,
+        appointmentDate: string,
+        status: string,
+        notes?: string | null,
+        user_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1026,7 +1106,7 @@ export type CreateBiometricDataMutation = {
     id: string,
     data: string,
     status: string,
-    user_id: string,
+    user_id?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1043,7 +1123,7 @@ export type UpdateBiometricDataMutation = {
     id: string,
     data: string,
     status: string,
-    user_id: string,
+    user_id?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1060,35 +1140,216 @@ export type DeleteBiometricDataMutation = {
     id: string,
     data: string,
     status: string,
-    user_id: string,
+    user_id?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type CreateMedicalReportMutationVariables = {
-  input: CreateMedicalReportInput,
-  condition?: ModelMedicalReportConditionInput | null,
+export type CreateAppointmentMutationVariables = {
+  input: CreateAppointmentInput,
+  condition?: ModelAppointmentConditionInput | null,
 };
 
-export type CreateMedicalReportMutation = {
-  createMedicalReport?:  {
-    __typename: "MedicalReport",
+export type CreateAppointmentMutation = {
+  createAppointment?:  {
+    __typename: "Appointment",
     id: string,
-    report_text?: string | null,
-    doctor_name?: string | null,
-    appointment_date?: string | null,
+    appointmentDate: string,
+    status: string,
+    notes?: string | null,
+    user_id?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateAppointmentMutationVariables = {
+  input: UpdateAppointmentInput,
+  condition?: ModelAppointmentConditionInput | null,
+};
+
+export type UpdateAppointmentMutation = {
+  updateAppointment?:  {
+    __typename: "Appointment",
+    id: string,
+    appointmentDate: string,
+    status: string,
+    notes?: string | null,
+    user_id?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteAppointmentMutationVariables = {
+  input: DeleteAppointmentInput,
+  condition?: ModelAppointmentConditionInput | null,
+};
+
+export type DeleteAppointmentMutation = {
+  deleteAppointment?:  {
+    __typename: "Appointment",
+    id: string,
+    appointmentDate: string,
+    status: string,
+    notes?: string | null,
+    user_id?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateAdminMutationVariables = {
+  input: CreateAdminInput,
+  condition?: ModelAdminConditionInput | null,
+};
+
+export type CreateAdminMutation = {
+  createAdmin?:  {
+    __typename: "Admin",
+    id: string,
+    name: string,
+    surname: string,
+    email: string,
+    password: string,
+    access_type?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateAdminMutationVariables = {
+  input: UpdateAdminInput,
+  condition?: ModelAdminConditionInput | null,
+};
+
+export type UpdateAdminMutation = {
+  updateAdmin?:  {
+    __typename: "Admin",
+    id: string,
+    name: string,
+    surname: string,
+    email: string,
+    password: string,
+    access_type?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteAdminMutationVariables = {
+  input: DeleteAdminInput,
+  condition?: ModelAdminConditionInput | null,
+};
+
+export type DeleteAdminMutation = {
+  deleteAdmin?:  {
+    __typename: "Admin",
+    id: string,
+    name: string,
+    surname: string,
+    email: string,
+    password: string,
+    access_type?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateMedicalRecordsMutationVariables = {
+  input: CreateMedicalRecordsInput,
+  condition?: ModelMedicalRecordsConditionInput | null,
+};
+
+export type CreateMedicalRecordsMutation = {
+  createMedicalRecords?:  {
+    __typename: "MedicalRecords",
+    id: string,
+    report_text: string,
+    doctor_name: string,
+    appointment_date: string,
     medical_report_status: string,
-    user_id: string,
-    hospital?:  {
-      __typename: "ModelHospitalConnection",
+    patient_id?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateMedicalRecordsMutationVariables = {
+  input: UpdateMedicalRecordsInput,
+  condition?: ModelMedicalRecordsConditionInput | null,
+};
+
+export type UpdateMedicalRecordsMutation = {
+  updateMedicalRecords?:  {
+    __typename: "MedicalRecords",
+    id: string,
+    report_text: string,
+    doctor_name: string,
+    appointment_date: string,
+    medical_report_status: string,
+    patient_id?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteMedicalRecordsMutationVariables = {
+  input: DeleteMedicalRecordsInput,
+  condition?: ModelMedicalRecordsConditionInput | null,
+};
+
+export type DeleteMedicalRecordsMutation = {
+  deleteMedicalRecords?:  {
+    __typename: "MedicalRecords",
+    id: string,
+    report_text: string,
+    doctor_name: string,
+    appointment_date: string,
+    medical_report_status: string,
+    patient_id?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreatePatientMutationVariables = {
+  input: CreatePatientInput,
+  condition?: ModelPatientConditionInput | null,
+};
+
+export type CreatePatientMutation = {
+  createPatient?:  {
+    __typename: "Patient",
+    id: string,
+    user_id?: string | null,
+    prescription?:  {
+      __typename: "ModelPrescriptionConnection",
       items:  Array< {
-        __typename: "Hospital",
+        __typename: "Prescription",
         id: string,
-        hospital_name: string,
-        address: string,
-        postal_code: string,
-        medical_report_id: string,
+        patient_name: string,
+        medication_name: string,
+        dosage: string,
+        doctor_name: string,
+        patient_id?: string | null,
+        medical_doctor_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    medicalRecords?:  {
+      __typename: "ModelMedicalRecordsConnection",
+      items:  Array< {
+        __typename: "MedicalRecords",
+        id: string,
+        report_text: string,
+        doctor_name: string,
+        appointment_date: string,
+        medical_report_status: string,
+        patient_id?: string | null,
         createdAt: string,
         updatedAt: string,
       } | null >,
@@ -1099,29 +1360,42 @@ export type CreateMedicalReportMutation = {
   } | null,
 };
 
-export type UpdateMedicalReportMutationVariables = {
-  input: UpdateMedicalReportInput,
-  condition?: ModelMedicalReportConditionInput | null,
+export type UpdatePatientMutationVariables = {
+  input: UpdatePatientInput,
+  condition?: ModelPatientConditionInput | null,
 };
 
-export type UpdateMedicalReportMutation = {
-  updateMedicalReport?:  {
-    __typename: "MedicalReport",
+export type UpdatePatientMutation = {
+  updatePatient?:  {
+    __typename: "Patient",
     id: string,
-    report_text?: string | null,
-    doctor_name?: string | null,
-    appointment_date?: string | null,
-    medical_report_status: string,
-    user_id: string,
-    hospital?:  {
-      __typename: "ModelHospitalConnection",
+    user_id?: string | null,
+    prescription?:  {
+      __typename: "ModelPrescriptionConnection",
       items:  Array< {
-        __typename: "Hospital",
+        __typename: "Prescription",
         id: string,
-        hospital_name: string,
-        address: string,
-        postal_code: string,
-        medical_report_id: string,
+        patient_name: string,
+        medication_name: string,
+        dosage: string,
+        doctor_name: string,
+        patient_id?: string | null,
+        medical_doctor_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    medicalRecords?:  {
+      __typename: "ModelMedicalRecordsConnection",
+      items:  Array< {
+        __typename: "MedicalRecords",
+        id: string,
+        report_text: string,
+        doctor_name: string,
+        appointment_date: string,
+        medical_report_status: string,
+        patient_id?: string | null,
         createdAt: string,
         updatedAt: string,
       } | null >,
@@ -1132,91 +1406,47 @@ export type UpdateMedicalReportMutation = {
   } | null,
 };
 
-export type DeleteMedicalReportMutationVariables = {
-  input: DeleteMedicalReportInput,
-  condition?: ModelMedicalReportConditionInput | null,
+export type DeletePatientMutationVariables = {
+  input: DeletePatientInput,
+  condition?: ModelPatientConditionInput | null,
 };
 
-export type DeleteMedicalReportMutation = {
-  deleteMedicalReport?:  {
-    __typename: "MedicalReport",
+export type DeletePatientMutation = {
+  deletePatient?:  {
+    __typename: "Patient",
     id: string,
-    report_text?: string | null,
-    doctor_name?: string | null,
-    appointment_date?: string | null,
-    medical_report_status: string,
-    user_id: string,
-    hospital?:  {
-      __typename: "ModelHospitalConnection",
+    user_id?: string | null,
+    prescription?:  {
+      __typename: "ModelPrescriptionConnection",
       items:  Array< {
-        __typename: "Hospital",
+        __typename: "Prescription",
         id: string,
-        hospital_name: string,
-        address: string,
-        postal_code: string,
-        medical_report_id: string,
+        patient_name: string,
+        medication_name: string,
+        dosage: string,
+        doctor_name: string,
+        patient_id?: string | null,
+        medical_doctor_id?: string | null,
         createdAt: string,
         updatedAt: string,
       } | null >,
       nextToken?: string | null,
     } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type CreateMedicalHistoryMutationVariables = {
-  input: CreateMedicalHistoryInput,
-  condition?: ModelMedicalHistoryConditionInput | null,
-};
-
-export type CreateMedicalHistoryMutation = {
-  createMedicalHistory?:  {
-    __typename: "MedicalHistory",
-    id: string,
-    condition?: string | null,
-    allergies?: string | null,
-    surgeries?: string | null,
-    medications?: string | null,
-    user_id: string,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type UpdateMedicalHistoryMutationVariables = {
-  input: UpdateMedicalHistoryInput,
-  condition?: ModelMedicalHistoryConditionInput | null,
-};
-
-export type UpdateMedicalHistoryMutation = {
-  updateMedicalHistory?:  {
-    __typename: "MedicalHistory",
-    id: string,
-    condition?: string | null,
-    allergies?: string | null,
-    surgeries?: string | null,
-    medications?: string | null,
-    user_id: string,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type DeleteMedicalHistoryMutationVariables = {
-  input: DeleteMedicalHistoryInput,
-  condition?: ModelMedicalHistoryConditionInput | null,
-};
-
-export type DeleteMedicalHistoryMutation = {
-  deleteMedicalHistory?:  {
-    __typename: "MedicalHistory",
-    id: string,
-    condition?: string | null,
-    allergies?: string | null,
-    surgeries?: string | null,
-    medications?: string | null,
-    user_id: string,
+    medicalRecords?:  {
+      __typename: "ModelMedicalRecordsConnection",
+      items:  Array< {
+        __typename: "MedicalRecords",
+        id: string,
+        report_text: string,
+        doctor_name: string,
+        appointment_date: string,
+        medical_report_status: string,
+        patient_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1234,17 +1464,47 @@ export type CreateHospitalMutation = {
     hospital_name: string,
     address: string,
     postal_code: string,
-    medical_report_id: string,
-    doctor?:  {
-      __typename: "ModelDoctorConnection",
+    medicalDoctor?:  {
+      __typename: "ModelMedicalDoctorConnection",
       items:  Array< {
-        __typename: "Doctor",
+        __typename: "MedicalDoctor",
         id: string,
-        first_name?: string | null,
-        last_name?: string | null,
-        specialization?: string | null,
-        cell_no?: string | null,
-        hospital_id: string,
+        first_name: string,
+        last_name: string,
+        specialization: string,
+        email: string,
+        password: string,
+        phone: string,
+        access_type?: string | null,
+        hospital_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    departmentOfHomeAffairs?:  {
+      __typename: "ModelDepartmentOfHomeAffairsConnection",
+      items:  Array< {
+        __typename: "DepartmentOfHomeAffairs",
+        hospital_id?: string | null,
+        name: string,
+        surname: string,
+        address: string,
+        postal_code: string,
+        id_number: string,
+        cell_phone_no?: string | null,
+        race: string,
+        date_of_birth?: string | null,
+        gender?: string | null,
+        nationality?: string | null,
+        email?: string | null,
+        marital_status?: string | null,
+        citizenship_status?: string | null,
+        photo_url?: string | null,
+        notes?: string | null,
+        emergency_contact_name?: string | null,
+        emergency_contact_phone?: string | null,
+        id: string,
         createdAt: string,
         updatedAt: string,
       } | null >,
@@ -1267,17 +1527,47 @@ export type UpdateHospitalMutation = {
     hospital_name: string,
     address: string,
     postal_code: string,
-    medical_report_id: string,
-    doctor?:  {
-      __typename: "ModelDoctorConnection",
+    medicalDoctor?:  {
+      __typename: "ModelMedicalDoctorConnection",
       items:  Array< {
-        __typename: "Doctor",
+        __typename: "MedicalDoctor",
         id: string,
-        first_name?: string | null,
-        last_name?: string | null,
-        specialization?: string | null,
-        cell_no?: string | null,
-        hospital_id: string,
+        first_name: string,
+        last_name: string,
+        specialization: string,
+        email: string,
+        password: string,
+        phone: string,
+        access_type?: string | null,
+        hospital_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    departmentOfHomeAffairs?:  {
+      __typename: "ModelDepartmentOfHomeAffairsConnection",
+      items:  Array< {
+        __typename: "DepartmentOfHomeAffairs",
+        hospital_id?: string | null,
+        name: string,
+        surname: string,
+        address: string,
+        postal_code: string,
+        id_number: string,
+        cell_phone_no?: string | null,
+        race: string,
+        date_of_birth?: string | null,
+        gender?: string | null,
+        nationality?: string | null,
+        email?: string | null,
+        marital_status?: string | null,
+        citizenship_status?: string | null,
+        photo_url?: string | null,
+        notes?: string | null,
+        emergency_contact_name?: string | null,
+        emergency_contact_phone?: string | null,
+        id: string,
         createdAt: string,
         updatedAt: string,
       } | null >,
@@ -1300,17 +1590,47 @@ export type DeleteHospitalMutation = {
     hospital_name: string,
     address: string,
     postal_code: string,
-    medical_report_id: string,
-    doctor?:  {
-      __typename: "ModelDoctorConnection",
+    medicalDoctor?:  {
+      __typename: "ModelMedicalDoctorConnection",
       items:  Array< {
-        __typename: "Doctor",
+        __typename: "MedicalDoctor",
         id: string,
-        first_name?: string | null,
-        last_name?: string | null,
-        specialization?: string | null,
-        cell_no?: string | null,
-        hospital_id: string,
+        first_name: string,
+        last_name: string,
+        specialization: string,
+        email: string,
+        password: string,
+        phone: string,
+        access_type?: string | null,
+        hospital_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    departmentOfHomeAffairs?:  {
+      __typename: "ModelDepartmentOfHomeAffairsConnection",
+      items:  Array< {
+        __typename: "DepartmentOfHomeAffairs",
+        hospital_id?: string | null,
+        name: string,
+        surname: string,
+        address: string,
+        postal_code: string,
+        id_number: string,
+        cell_phone_no?: string | null,
+        race: string,
+        date_of_birth?: string | null,
+        gender?: string | null,
+        nationality?: string | null,
+        email?: string | null,
+        marital_status?: string | null,
+        citizenship_status?: string | null,
+        photo_url?: string | null,
+        notes?: string | null,
+        emergency_contact_name?: string | null,
+        emergency_contact_phone?: string | null,
+        id: string,
         createdAt: string,
         updatedAt: string,
       } | null >,
@@ -1321,139 +1641,271 @@ export type DeleteHospitalMutation = {
   } | null,
 };
 
-export type CreateDoctorMutationVariables = {
-  input: CreateDoctorInput,
-  condition?: ModelDoctorConditionInput | null,
+export type CreatePrescriptionMutationVariables = {
+  input: CreatePrescriptionInput,
+  condition?: ModelPrescriptionConditionInput | null,
 };
 
-export type CreateDoctorMutation = {
-  createDoctor?:  {
-    __typename: "Doctor",
+export type CreatePrescriptionMutation = {
+  createPrescription?:  {
+    __typename: "Prescription",
     id: string,
-    first_name?: string | null,
-    last_name?: string | null,
-    specialization?: string | null,
-    contactInformation?:  {
-      __typename: "ContactInfo",
-      email?: string | null,
-      phone?: string | null,
+    patient_name: string,
+    medication_name: string,
+    dosage: string,
+    doctor_name: string,
+    patient_id?: string | null,
+    medical_doctor_id?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdatePrescriptionMutationVariables = {
+  input: UpdatePrescriptionInput,
+  condition?: ModelPrescriptionConditionInput | null,
+};
+
+export type UpdatePrescriptionMutation = {
+  updatePrescription?:  {
+    __typename: "Prescription",
+    id: string,
+    patient_name: string,
+    medication_name: string,
+    dosage: string,
+    doctor_name: string,
+    patient_id?: string | null,
+    medical_doctor_id?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeletePrescriptionMutationVariables = {
+  input: DeletePrescriptionInput,
+  condition?: ModelPrescriptionConditionInput | null,
+};
+
+export type DeletePrescriptionMutation = {
+  deletePrescription?:  {
+    __typename: "Prescription",
+    id: string,
+    patient_name: string,
+    medication_name: string,
+    dosage: string,
+    doctor_name: string,
+    patient_id?: string | null,
+    medical_doctor_id?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateMedicalDoctorMutationVariables = {
+  input: CreateMedicalDoctorInput,
+  condition?: ModelMedicalDoctorConditionInput | null,
+};
+
+export type CreateMedicalDoctorMutation = {
+  createMedicalDoctor?:  {
+    __typename: "MedicalDoctor",
+    id: string,
+    first_name: string,
+    last_name: string,
+    specialization: string,
+    email: string,
+    password: string,
+    phone: string,
+    access_type?: string | null,
+    hospital_id?: string | null,
+    prescription?:  {
+      __typename: "ModelPrescriptionConnection",
+      items:  Array< {
+        __typename: "Prescription",
+        id: string,
+        patient_name: string,
+        medication_name: string,
+        dosage: string,
+        doctor_name: string,
+        patient_id?: string | null,
+        medical_doctor_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
     } | null,
-    cell_no?: string | null,
-    hospital_id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type UpdateDoctorMutationVariables = {
-  input: UpdateDoctorInput,
-  condition?: ModelDoctorConditionInput | null,
+export type UpdateMedicalDoctorMutationVariables = {
+  input: UpdateMedicalDoctorInput,
+  condition?: ModelMedicalDoctorConditionInput | null,
 };
 
-export type UpdateDoctorMutation = {
-  updateDoctor?:  {
-    __typename: "Doctor",
+export type UpdateMedicalDoctorMutation = {
+  updateMedicalDoctor?:  {
+    __typename: "MedicalDoctor",
     id: string,
-    first_name?: string | null,
-    last_name?: string | null,
-    specialization?: string | null,
-    contactInformation?:  {
-      __typename: "ContactInfo",
-      email?: string | null,
-      phone?: string | null,
+    first_name: string,
+    last_name: string,
+    specialization: string,
+    email: string,
+    password: string,
+    phone: string,
+    access_type?: string | null,
+    hospital_id?: string | null,
+    prescription?:  {
+      __typename: "ModelPrescriptionConnection",
+      items:  Array< {
+        __typename: "Prescription",
+        id: string,
+        patient_name: string,
+        medication_name: string,
+        dosage: string,
+        doctor_name: string,
+        patient_id?: string | null,
+        medical_doctor_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
     } | null,
-    cell_no?: string | null,
-    hospital_id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type DeleteDoctorMutationVariables = {
-  input: DeleteDoctorInput,
-  condition?: ModelDoctorConditionInput | null,
+export type DeleteMedicalDoctorMutationVariables = {
+  input: DeleteMedicalDoctorInput,
+  condition?: ModelMedicalDoctorConditionInput | null,
 };
 
-export type DeleteDoctorMutation = {
-  deleteDoctor?:  {
-    __typename: "Doctor",
+export type DeleteMedicalDoctorMutation = {
+  deleteMedicalDoctor?:  {
+    __typename: "MedicalDoctor",
     id: string,
-    first_name?: string | null,
-    last_name?: string | null,
-    specialization?: string | null,
-    contactInformation?:  {
-      __typename: "ContactInfo",
-      email?: string | null,
-      phone?: string | null,
+    first_name: string,
+    last_name: string,
+    specialization: string,
+    email: string,
+    password: string,
+    phone: string,
+    access_type?: string | null,
+    hospital_id?: string | null,
+    prescription?:  {
+      __typename: "ModelPrescriptionConnection",
+      items:  Array< {
+        __typename: "Prescription",
+        id: string,
+        patient_name: string,
+        medication_name: string,
+        dosage: string,
+        doctor_name: string,
+        patient_id?: string | null,
+        medical_doctor_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
     } | null,
-    cell_no?: string | null,
-    hospital_id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type CreateGovernmentGrantMutationVariables = {
-  input: CreateGovernmentGrantInput,
-  condition?: ModelGovernmentGrantConditionInput | null,
+export type CreateDepartmentOfHomeAffairsMutationVariables = {
+  input: CreateDepartmentOfHomeAffairsInput,
+  condition?: ModelDepartmentOfHomeAffairsConditionInput | null,
 };
 
-export type CreateGovernmentGrantMutation = {
-  createGovernmentGrant?:  {
-    __typename: "GovernmentGrant",
+export type CreateDepartmentOfHomeAffairsMutation = {
+  createDepartmentOfHomeAffairs?:  {
+    __typename: "DepartmentOfHomeAffairs",
+    hospital_id?: string | null,
+    name: string,
+    surname: string,
+    address: string,
+    postal_code: string,
+    id_number: string,
+    cell_phone_no?: string | null,
+    race: string,
+    date_of_birth?: string | null,
+    gender?: string | null,
+    nationality?: string | null,
+    email?: string | null,
+    marital_status?: string | null,
+    citizenship_status?: string | null,
+    photo_url?: string | null,
+    notes?: string | null,
+    emergency_contact_name?: string | null,
+    emergency_contact_phone?: string | null,
     id: string,
-    grantName: string,
-    description?: string | null,
-    amount?: number | null,
-    startDate?: string | null,
-    endDate?: string | null,
-    applicationDeadline?: string | null,
-    eligibilityRequirements?: Array< string | null > | null,
-    applicationProcess?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type UpdateGovernmentGrantMutationVariables = {
-  input: UpdateGovernmentGrantInput,
-  condition?: ModelGovernmentGrantConditionInput | null,
+export type UpdateDepartmentOfHomeAffairsMutationVariables = {
+  input: UpdateDepartmentOfHomeAffairsInput,
+  condition?: ModelDepartmentOfHomeAffairsConditionInput | null,
 };
 
-export type UpdateGovernmentGrantMutation = {
-  updateGovernmentGrant?:  {
-    __typename: "GovernmentGrant",
+export type UpdateDepartmentOfHomeAffairsMutation = {
+  updateDepartmentOfHomeAffairs?:  {
+    __typename: "DepartmentOfHomeAffairs",
+    hospital_id?: string | null,
+    name: string,
+    surname: string,
+    address: string,
+    postal_code: string,
+    id_number: string,
+    cell_phone_no?: string | null,
+    race: string,
+    date_of_birth?: string | null,
+    gender?: string | null,
+    nationality?: string | null,
+    email?: string | null,
+    marital_status?: string | null,
+    citizenship_status?: string | null,
+    photo_url?: string | null,
+    notes?: string | null,
+    emergency_contact_name?: string | null,
+    emergency_contact_phone?: string | null,
     id: string,
-    grantName: string,
-    description?: string | null,
-    amount?: number | null,
-    startDate?: string | null,
-    endDate?: string | null,
-    applicationDeadline?: string | null,
-    eligibilityRequirements?: Array< string | null > | null,
-    applicationProcess?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type DeleteGovernmentGrantMutationVariables = {
-  input: DeleteGovernmentGrantInput,
-  condition?: ModelGovernmentGrantConditionInput | null,
+export type DeleteDepartmentOfHomeAffairsMutationVariables = {
+  input: DeleteDepartmentOfHomeAffairsInput,
+  condition?: ModelDepartmentOfHomeAffairsConditionInput | null,
 };
 
-export type DeleteGovernmentGrantMutation = {
-  deleteGovernmentGrant?:  {
-    __typename: "GovernmentGrant",
+export type DeleteDepartmentOfHomeAffairsMutation = {
+  deleteDepartmentOfHomeAffairs?:  {
+    __typename: "DepartmentOfHomeAffairs",
+    hospital_id?: string | null,
+    name: string,
+    surname: string,
+    address: string,
+    postal_code: string,
+    id_number: string,
+    cell_phone_no?: string | null,
+    race: string,
+    date_of_birth?: string | null,
+    gender?: string | null,
+    nationality?: string | null,
+    email?: string | null,
+    marital_status?: string | null,
+    citizenship_status?: string | null,
+    photo_url?: string | null,
+    notes?: string | null,
+    emergency_contact_name?: string | null,
+    emergency_contact_phone?: string | null,
     id: string,
-    grantName: string,
-    description?: string | null,
-    amount?: number | null,
-    startDate?: string | null,
-    endDate?: string | null,
-    applicationDeadline?: string | null,
-    eligibilityRequirements?: Array< string | null > | null,
-    applicationProcess?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1476,59 +1928,43 @@ export type GetUserQuery = {
     id_number: string,
     cell_phone_no: string,
     access_type: string,
-    notification?:  {
-      __typename: "ModelNotificationConnection",
-      items:  Array< {
-        __typename: "Notification",
-        id: string,
-        message: string,
-        user_id: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
-    medicalReport?:  {
-      __typename: "ModelMedicalReportConnection",
-      items:  Array< {
-        __typename: "MedicalReport",
-        id: string,
-        report_text?: string | null,
-        doctor_name?: string | null,
-        appointment_date?: string | null,
-        medical_report_status: string,
-        user_id: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
-    biometricData?:  {
+    biometricdata?:  {
       __typename: "ModelBiometricDataConnection",
       items:  Array< {
         __typename: "BiometricData",
         id: string,
         data: string,
         status: string,
-        user_id: string,
+        user_id?: string | null,
         createdAt: string,
         updatedAt: string,
       } | null >,
       nextToken?: string | null,
     } | null,
-    governmentGrant?:  {
-      __typename: "GovernmentGrant",
-      id: string,
-      grantName: string,
-      description?: string | null,
-      amount?: number | null,
-      startDate?: string | null,
-      endDate?: string | null,
-      applicationDeadline?: string | null,
-      eligibilityRequirements?: Array< string | null > | null,
-      applicationProcess?: string | null,
-      createdAt: string,
-      updatedAt: string,
+    patient?:  {
+      __typename: "ModelPatientConnection",
+      items:  Array< {
+        __typename: "Patient",
+        id: string,
+        user_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    appointment?:  {
+      __typename: "ModelAppointmentConnection",
+      items:  Array< {
+        __typename: "Appointment",
+        id: string,
+        appointmentDate: string,
+        status: string,
+        notes?: string | null,
+        user_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
@@ -1556,68 +1992,18 @@ export type ListUsersQuery = {
       id_number: string,
       cell_phone_no: string,
       access_type: string,
-      notification?:  {
-        __typename: "ModelNotificationConnection",
-        nextToken?: string | null,
-      } | null,
-      medicalReport?:  {
-        __typename: "ModelMedicalReportConnection",
-        nextToken?: string | null,
-      } | null,
-      biometricData?:  {
+      biometricdata?:  {
         __typename: "ModelBiometricDataConnection",
         nextToken?: string | null,
       } | null,
-      governmentGrant?:  {
-        __typename: "GovernmentGrant",
-        id: string,
-        grantName: string,
-        description?: string | null,
-        amount?: number | null,
-        startDate?: string | null,
-        endDate?: string | null,
-        applicationDeadline?: string | null,
-        eligibilityRequirements?: Array< string | null > | null,
-        applicationProcess?: string | null,
-        createdAt: string,
-        updatedAt: string,
+      patient?:  {
+        __typename: "ModelPatientConnection",
+        nextToken?: string | null,
       } | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type GetNotificationQueryVariables = {
-  id: string,
-};
-
-export type GetNotificationQuery = {
-  getNotification?:  {
-    __typename: "Notification",
-    id: string,
-    message: string,
-    user_id: string,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type ListNotificationsQueryVariables = {
-  filter?: ModelNotificationFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type ListNotificationsQuery = {
-  listNotifications?:  {
-    __typename: "ModelNotificationConnection",
-    items:  Array< {
-      __typename: "Notification",
-      id: string,
-      message: string,
-      user_id: string,
+      appointment?:  {
+        __typename: "ModelAppointmentConnection",
+        nextToken?: string | null,
+      } | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -1635,7 +2021,7 @@ export type GetBiometricDataQuery = {
     id: string,
     data: string,
     status: string,
-    user_id: string,
+    user_id?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1655,7 +2041,7 @@ export type ListBiometricDataQuery = {
       id: string,
       data: string,
       status: string,
-      user_id: string,
+      user_id?: string | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -1663,28 +2049,165 @@ export type ListBiometricDataQuery = {
   } | null,
 };
 
-export type GetMedicalReportQueryVariables = {
+export type GetAppointmentQueryVariables = {
   id: string,
 };
 
-export type GetMedicalReportQuery = {
-  getMedicalReport?:  {
-    __typename: "MedicalReport",
+export type GetAppointmentQuery = {
+  getAppointment?:  {
+    __typename: "Appointment",
     id: string,
-    report_text?: string | null,
-    doctor_name?: string | null,
-    appointment_date?: string | null,
+    appointmentDate: string,
+    status: string,
+    notes?: string | null,
+    user_id?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListAppointmentsQueryVariables = {
+  filter?: ModelAppointmentFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListAppointmentsQuery = {
+  listAppointments?:  {
+    __typename: "ModelAppointmentConnection",
+    items:  Array< {
+      __typename: "Appointment",
+      id: string,
+      appointmentDate: string,
+      status: string,
+      notes?: string | null,
+      user_id?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetAdminQueryVariables = {
+  id: string,
+};
+
+export type GetAdminQuery = {
+  getAdmin?:  {
+    __typename: "Admin",
+    id: string,
+    name: string,
+    surname: string,
+    email: string,
+    password: string,
+    access_type?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListAdminsQueryVariables = {
+  filter?: ModelAdminFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListAdminsQuery = {
+  listAdmins?:  {
+    __typename: "ModelAdminConnection",
+    items:  Array< {
+      __typename: "Admin",
+      id: string,
+      name: string,
+      surname: string,
+      email: string,
+      password: string,
+      access_type?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetMedicalRecordsQueryVariables = {
+  id: string,
+};
+
+export type GetMedicalRecordsQuery = {
+  getMedicalRecords?:  {
+    __typename: "MedicalRecords",
+    id: string,
+    report_text: string,
+    doctor_name: string,
+    appointment_date: string,
     medical_report_status: string,
-    user_id: string,
-    hospital?:  {
-      __typename: "ModelHospitalConnection",
+    patient_id?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListMedicalRecordsQueryVariables = {
+  filter?: ModelMedicalRecordsFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListMedicalRecordsQuery = {
+  listMedicalRecords?:  {
+    __typename: "ModelMedicalRecordsConnection",
+    items:  Array< {
+      __typename: "MedicalRecords",
+      id: string,
+      report_text: string,
+      doctor_name: string,
+      appointment_date: string,
+      medical_report_status: string,
+      patient_id?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetPatientQueryVariables = {
+  id: string,
+};
+
+export type GetPatientQuery = {
+  getPatient?:  {
+    __typename: "Patient",
+    id: string,
+    user_id?: string | null,
+    prescription?:  {
+      __typename: "ModelPrescriptionConnection",
       items:  Array< {
-        __typename: "Hospital",
+        __typename: "Prescription",
         id: string,
-        hospital_name: string,
-        address: string,
-        postal_code: string,
-        medical_report_id: string,
+        patient_name: string,
+        medication_name: string,
+        dosage: string,
+        doctor_name: string,
+        patient_id?: string | null,
+        medical_doctor_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    medicalRecords?:  {
+      __typename: "ModelMedicalRecordsConnection",
+      items:  Array< {
+        __typename: "MedicalRecords",
+        id: string,
+        report_text: string,
+        doctor_name: string,
+        appointment_date: string,
+        medical_report_status: string,
+        patient_id?: string | null,
         createdAt: string,
         updatedAt: string,
       } | null >,
@@ -1695,69 +2218,27 @@ export type GetMedicalReportQuery = {
   } | null,
 };
 
-export type ListMedicalReportsQueryVariables = {
-  filter?: ModelMedicalReportFilterInput | null,
+export type ListPatientsQueryVariables = {
+  filter?: ModelPatientFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type ListMedicalReportsQuery = {
-  listMedicalReports?:  {
-    __typename: "ModelMedicalReportConnection",
+export type ListPatientsQuery = {
+  listPatients?:  {
+    __typename: "ModelPatientConnection",
     items:  Array< {
-      __typename: "MedicalReport",
+      __typename: "Patient",
       id: string,
-      report_text?: string | null,
-      doctor_name?: string | null,
-      appointment_date?: string | null,
-      medical_report_status: string,
-      user_id: string,
-      hospital?:  {
-        __typename: "ModelHospitalConnection",
+      user_id?: string | null,
+      prescription?:  {
+        __typename: "ModelPrescriptionConnection",
         nextToken?: string | null,
       } | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type GetMedicalHistoryQueryVariables = {
-  id: string,
-};
-
-export type GetMedicalHistoryQuery = {
-  getMedicalHistory?:  {
-    __typename: "MedicalHistory",
-    id: string,
-    condition?: string | null,
-    allergies?: string | null,
-    surgeries?: string | null,
-    medications?: string | null,
-    user_id: string,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type ListMedicalHistoriesQueryVariables = {
-  filter?: ModelMedicalHistoryFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type ListMedicalHistoriesQuery = {
-  listMedicalHistories?:  {
-    __typename: "ModelMedicalHistoryConnection",
-    items:  Array< {
-      __typename: "MedicalHistory",
-      id: string,
-      condition?: string | null,
-      allergies?: string | null,
-      surgeries?: string | null,
-      medications?: string | null,
-      user_id: string,
+      medicalRecords?:  {
+        __typename: "ModelMedicalRecordsConnection",
+        nextToken?: string | null,
+      } | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -1776,17 +2257,47 @@ export type GetHospitalQuery = {
     hospital_name: string,
     address: string,
     postal_code: string,
-    medical_report_id: string,
-    doctor?:  {
-      __typename: "ModelDoctorConnection",
+    medicalDoctor?:  {
+      __typename: "ModelMedicalDoctorConnection",
       items:  Array< {
-        __typename: "Doctor",
+        __typename: "MedicalDoctor",
         id: string,
-        first_name?: string | null,
-        last_name?: string | null,
-        specialization?: string | null,
-        cell_no?: string | null,
-        hospital_id: string,
+        first_name: string,
+        last_name: string,
+        specialization: string,
+        email: string,
+        password: string,
+        phone: string,
+        access_type?: string | null,
+        hospital_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    departmentOfHomeAffairs?:  {
+      __typename: "ModelDepartmentOfHomeAffairsConnection",
+      items:  Array< {
+        __typename: "DepartmentOfHomeAffairs",
+        hospital_id?: string | null,
+        name: string,
+        surname: string,
+        address: string,
+        postal_code: string,
+        id_number: string,
+        cell_phone_no?: string | null,
+        race: string,
+        date_of_birth?: string | null,
+        gender?: string | null,
+        nationality?: string | null,
+        email?: string | null,
+        marital_status?: string | null,
+        citizenship_status?: string | null,
+        photo_url?: string | null,
+        notes?: string | null,
+        emergency_contact_name?: string | null,
+        emergency_contact_phone?: string | null,
+        id: string,
         createdAt: string,
         updatedAt: string,
       } | null >,
@@ -1812,9 +2323,12 @@ export type ListHospitalsQuery = {
       hospital_name: string,
       address: string,
       postal_code: string,
-      medical_report_id: string,
-      doctor?:  {
-        __typename: "ModelDoctorConnection",
+      medicalDoctor?:  {
+        __typename: "ModelMedicalDoctorConnection",
+        nextToken?: string | null,
+      } | null,
+      departmentOfHomeAffairs?:  {
+        __typename: "ModelDepartmentOfHomeAffairsConnection",
         nextToken?: string | null,
       } | null,
       createdAt: string,
@@ -1824,51 +2338,111 @@ export type ListHospitalsQuery = {
   } | null,
 };
 
-export type GetDoctorQueryVariables = {
+export type GetPrescriptionQueryVariables = {
   id: string,
 };
 
-export type GetDoctorQuery = {
-  getDoctor?:  {
-    __typename: "Doctor",
+export type GetPrescriptionQuery = {
+  getPrescription?:  {
+    __typename: "Prescription",
     id: string,
-    first_name?: string | null,
-    last_name?: string | null,
-    specialization?: string | null,
-    contactInformation?:  {
-      __typename: "ContactInfo",
-      email?: string | null,
-      phone?: string | null,
+    patient_name: string,
+    medication_name: string,
+    dosage: string,
+    doctor_name: string,
+    patient_id?: string | null,
+    medical_doctor_id?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListPrescriptionsQueryVariables = {
+  filter?: ModelPrescriptionFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListPrescriptionsQuery = {
+  listPrescriptions?:  {
+    __typename: "ModelPrescriptionConnection",
+    items:  Array< {
+      __typename: "Prescription",
+      id: string,
+      patient_name: string,
+      medication_name: string,
+      dosage: string,
+      doctor_name: string,
+      patient_id?: string | null,
+      medical_doctor_id?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetMedicalDoctorQueryVariables = {
+  id: string,
+};
+
+export type GetMedicalDoctorQuery = {
+  getMedicalDoctor?:  {
+    __typename: "MedicalDoctor",
+    id: string,
+    first_name: string,
+    last_name: string,
+    specialization: string,
+    email: string,
+    password: string,
+    phone: string,
+    access_type?: string | null,
+    hospital_id?: string | null,
+    prescription?:  {
+      __typename: "ModelPrescriptionConnection",
+      items:  Array< {
+        __typename: "Prescription",
+        id: string,
+        patient_name: string,
+        medication_name: string,
+        dosage: string,
+        doctor_name: string,
+        patient_id?: string | null,
+        medical_doctor_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
     } | null,
-    cell_no?: string | null,
-    hospital_id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type ListDoctorsQueryVariables = {
-  filter?: ModelDoctorFilterInput | null,
+export type ListMedicalDoctorsQueryVariables = {
+  filter?: ModelMedicalDoctorFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type ListDoctorsQuery = {
-  listDoctors?:  {
-    __typename: "ModelDoctorConnection",
+export type ListMedicalDoctorsQuery = {
+  listMedicalDoctors?:  {
+    __typename: "ModelMedicalDoctorConnection",
     items:  Array< {
-      __typename: "Doctor",
+      __typename: "MedicalDoctor",
       id: string,
-      first_name?: string | null,
-      last_name?: string | null,
-      specialization?: string | null,
-      contactInformation?:  {
-        __typename: "ContactInfo",
-        email?: string | null,
-        phone?: string | null,
+      first_name: string,
+      last_name: string,
+      specialization: string,
+      email: string,
+      password: string,
+      phone: string,
+      access_type?: string | null,
+      hospital_id?: string | null,
+      prescription?:  {
+        __typename: "ModelPrescriptionConnection",
+        nextToken?: string | null,
       } | null,
-      cell_no?: string | null,
-      hospital_id: string,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -1876,70 +2450,67 @@ export type ListDoctorsQuery = {
   } | null,
 };
 
-export type GetGovernmentGrantQueryVariables = {
+export type GetDepartmentOfHomeAffairsQueryVariables = {
   id: string,
 };
 
-export type GetGovernmentGrantQuery = {
-  getGovernmentGrant?:  {
-    __typename: "GovernmentGrant",
+export type GetDepartmentOfHomeAffairsQuery = {
+  getDepartmentOfHomeAffairs?:  {
+    __typename: "DepartmentOfHomeAffairs",
+    hospital_id?: string | null,
+    name: string,
+    surname: string,
+    address: string,
+    postal_code: string,
+    id_number: string,
+    cell_phone_no?: string | null,
+    race: string,
+    date_of_birth?: string | null,
+    gender?: string | null,
+    nationality?: string | null,
+    email?: string | null,
+    marital_status?: string | null,
+    citizenship_status?: string | null,
+    photo_url?: string | null,
+    notes?: string | null,
+    emergency_contact_name?: string | null,
+    emergency_contact_phone?: string | null,
     id: string,
-    grantName: string,
-    description?: string | null,
-    amount?: number | null,
-    startDate?: string | null,
-    endDate?: string | null,
-    applicationDeadline?: string | null,
-    eligibilityRequirements?: Array< string | null > | null,
-    applicationProcess?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type ListGovernmentGrantsQueryVariables = {
-  filter?: ModelGovernmentGrantFilterInput | null,
+export type ListDepartmentOfHomeAffairsQueryVariables = {
+  filter?: ModelDepartmentOfHomeAffairsFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type ListGovernmentGrantsQuery = {
-  listGovernmentGrants?:  {
-    __typename: "ModelGovernmentGrantConnection",
+export type ListDepartmentOfHomeAffairsQuery = {
+  listDepartmentOfHomeAffairs?:  {
+    __typename: "ModelDepartmentOfHomeAffairsConnection",
     items:  Array< {
-      __typename: "GovernmentGrant",
+      __typename: "DepartmentOfHomeAffairs",
+      hospital_id?: string | null,
+      name: string,
+      surname: string,
+      address: string,
+      postal_code: string,
+      id_number: string,
+      cell_phone_no?: string | null,
+      race: string,
+      date_of_birth?: string | null,
+      gender?: string | null,
+      nationality?: string | null,
+      email?: string | null,
+      marital_status?: string | null,
+      citizenship_status?: string | null,
+      photo_url?: string | null,
+      notes?: string | null,
+      emergency_contact_name?: string | null,
+      emergency_contact_phone?: string | null,
       id: string,
-      grantName: string,
-      description?: string | null,
-      amount?: number | null,
-      startDate?: string | null,
-      endDate?: string | null,
-      applicationDeadline?: string | null,
-      eligibilityRequirements?: Array< string | null > | null,
-      applicationProcess?: string | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type NotificationsByUser_idQueryVariables = {
-  user_id: string,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelNotificationFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type NotificationsByUser_idQuery = {
-  notificationsByUser_id?:  {
-    __typename: "ModelNotificationConnection",
-    items:  Array< {
-      __typename: "Notification",
-      id: string,
-      message: string,
-      user_id: string,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -1963,7 +2534,7 @@ export type BiometricDataByUser_idQuery = {
       id: string,
       data: string,
       status: string,
-      user_id: string,
+      user_id?: string | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -1971,29 +2542,50 @@ export type BiometricDataByUser_idQuery = {
   } | null,
 };
 
-export type MedicalReportsByUser_idQueryVariables = {
+export type AppointmentsByUser_idQueryVariables = {
   user_id: string,
   sortDirection?: ModelSortDirection | null,
-  filter?: ModelMedicalReportFilterInput | null,
+  filter?: ModelAppointmentFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type MedicalReportsByUser_idQuery = {
-  medicalReportsByUser_id?:  {
-    __typename: "ModelMedicalReportConnection",
+export type AppointmentsByUser_idQuery = {
+  appointmentsByUser_id?:  {
+    __typename: "ModelAppointmentConnection",
     items:  Array< {
-      __typename: "MedicalReport",
+      __typename: "Appointment",
       id: string,
-      report_text?: string | null,
-      doctor_name?: string | null,
-      appointment_date?: string | null,
+      appointmentDate: string,
+      status: string,
+      notes?: string | null,
+      user_id?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type MedicalRecordsByPatient_idQueryVariables = {
+  patient_id: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelMedicalRecordsFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type MedicalRecordsByPatient_idQuery = {
+  medicalRecordsByPatient_id?:  {
+    __typename: "ModelMedicalRecordsConnection",
+    items:  Array< {
+      __typename: "MedicalRecords",
+      id: string,
+      report_text: string,
+      doctor_name: string,
+      appointment_date: string,
       medical_report_status: string,
-      user_id: string,
-      hospital?:  {
-        __typename: "ModelHospitalConnection",
-        nextToken?: string | null,
-      } | null,
+      patient_id?: string | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -2001,52 +2593,27 @@ export type MedicalReportsByUser_idQuery = {
   } | null,
 };
 
-export type MedicalHistoriesByUser_idQueryVariables = {
+export type PatientsByUser_idQueryVariables = {
   user_id: string,
   sortDirection?: ModelSortDirection | null,
-  filter?: ModelMedicalHistoryFilterInput | null,
+  filter?: ModelPatientFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type MedicalHistoriesByUser_idQuery = {
-  medicalHistoriesByUser_id?:  {
-    __typename: "ModelMedicalHistoryConnection",
+export type PatientsByUser_idQuery = {
+  patientsByUser_id?:  {
+    __typename: "ModelPatientConnection",
     items:  Array< {
-      __typename: "MedicalHistory",
+      __typename: "Patient",
       id: string,
-      condition?: string | null,
-      allergies?: string | null,
-      surgeries?: string | null,
-      medications?: string | null,
-      user_id: string,
-      createdAt: string,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type HospitalsByMedical_report_idQueryVariables = {
-  medical_report_id: string,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelHospitalFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type HospitalsByMedical_report_idQuery = {
-  hospitalsByMedical_report_id?:  {
-    __typename: "ModelHospitalConnection",
-    items:  Array< {
-      __typename: "Hospital",
-      id: string,
-      hospital_name: string,
-      address: string,
-      postal_code: string,
-      medical_report_id: string,
-      doctor?:  {
-        __typename: "ModelDoctorConnection",
+      user_id?: string | null,
+      prescription?:  {
+        __typename: "ModelPrescriptionConnection",
+        nextToken?: string | null,
+      } | null,
+      medicalRecords?:  {
+        __typename: "ModelMedicalRecordsConnection",
         nextToken?: string | null,
       } | null,
       createdAt: string,
@@ -2056,30 +2623,125 @@ export type HospitalsByMedical_report_idQuery = {
   } | null,
 };
 
-export type DoctorsByHospital_idQueryVariables = {
+export type PrescriptionsByPatient_idQueryVariables = {
+  patient_id: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelPrescriptionFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type PrescriptionsByPatient_idQuery = {
+  prescriptionsByPatient_id?:  {
+    __typename: "ModelPrescriptionConnection",
+    items:  Array< {
+      __typename: "Prescription",
+      id: string,
+      patient_name: string,
+      medication_name: string,
+      dosage: string,
+      doctor_name: string,
+      patient_id?: string | null,
+      medical_doctor_id?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type PrescriptionsByMedical_doctor_idQueryVariables = {
+  medical_doctor_id: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelPrescriptionFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type PrescriptionsByMedical_doctor_idQuery = {
+  prescriptionsByMedical_doctor_id?:  {
+    __typename: "ModelPrescriptionConnection",
+    items:  Array< {
+      __typename: "Prescription",
+      id: string,
+      patient_name: string,
+      medication_name: string,
+      dosage: string,
+      doctor_name: string,
+      patient_id?: string | null,
+      medical_doctor_id?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type MedicalDoctorsByHospital_idQueryVariables = {
   hospital_id: string,
   sortDirection?: ModelSortDirection | null,
-  filter?: ModelDoctorFilterInput | null,
+  filter?: ModelMedicalDoctorFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type DoctorsByHospital_idQuery = {
-  doctorsByHospital_id?:  {
-    __typename: "ModelDoctorConnection",
+export type MedicalDoctorsByHospital_idQuery = {
+  medicalDoctorsByHospital_id?:  {
+    __typename: "ModelMedicalDoctorConnection",
     items:  Array< {
-      __typename: "Doctor",
+      __typename: "MedicalDoctor",
       id: string,
-      first_name?: string | null,
-      last_name?: string | null,
-      specialization?: string | null,
-      contactInformation?:  {
-        __typename: "ContactInfo",
-        email?: string | null,
-        phone?: string | null,
+      first_name: string,
+      last_name: string,
+      specialization: string,
+      email: string,
+      password: string,
+      phone: string,
+      access_type?: string | null,
+      hospital_id?: string | null,
+      prescription?:  {
+        __typename: "ModelPrescriptionConnection",
+        nextToken?: string | null,
       } | null,
-      cell_no?: string | null,
-      hospital_id: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type DepartmentOfHomeAffairsByHospital_idQueryVariables = {
+  hospital_id: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelDepartmentOfHomeAffairsFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type DepartmentOfHomeAffairsByHospital_idQuery = {
+  departmentOfHomeAffairsByHospital_id?:  {
+    __typename: "ModelDepartmentOfHomeAffairsConnection",
+    items:  Array< {
+      __typename: "DepartmentOfHomeAffairs",
+      hospital_id?: string | null,
+      name: string,
+      surname: string,
+      address: string,
+      postal_code: string,
+      id_number: string,
+      cell_phone_no?: string | null,
+      race: string,
+      date_of_birth?: string | null,
+      gender?: string | null,
+      nationality?: string | null,
+      email?: string | null,
+      marital_status?: string | null,
+      citizenship_status?: string | null,
+      photo_url?: string | null,
+      notes?: string | null,
+      emergency_contact_name?: string | null,
+      emergency_contact_phone?: string | null,
+      id: string,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -2104,59 +2766,43 @@ export type OnCreateUserSubscription = {
     id_number: string,
     cell_phone_no: string,
     access_type: string,
-    notification?:  {
-      __typename: "ModelNotificationConnection",
-      items:  Array< {
-        __typename: "Notification",
-        id: string,
-        message: string,
-        user_id: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
-    medicalReport?:  {
-      __typename: "ModelMedicalReportConnection",
-      items:  Array< {
-        __typename: "MedicalReport",
-        id: string,
-        report_text?: string | null,
-        doctor_name?: string | null,
-        appointment_date?: string | null,
-        medical_report_status: string,
-        user_id: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
-    biometricData?:  {
+    biometricdata?:  {
       __typename: "ModelBiometricDataConnection",
       items:  Array< {
         __typename: "BiometricData",
         id: string,
         data: string,
         status: string,
-        user_id: string,
+        user_id?: string | null,
         createdAt: string,
         updatedAt: string,
       } | null >,
       nextToken?: string | null,
     } | null,
-    governmentGrant?:  {
-      __typename: "GovernmentGrant",
-      id: string,
-      grantName: string,
-      description?: string | null,
-      amount?: number | null,
-      startDate?: string | null,
-      endDate?: string | null,
-      applicationDeadline?: string | null,
-      eligibilityRequirements?: Array< string | null > | null,
-      applicationProcess?: string | null,
-      createdAt: string,
-      updatedAt: string,
+    patient?:  {
+      __typename: "ModelPatientConnection",
+      items:  Array< {
+        __typename: "Patient",
+        id: string,
+        user_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    appointment?:  {
+      __typename: "ModelAppointmentConnection",
+      items:  Array< {
+        __typename: "Appointment",
+        id: string,
+        appointmentDate: string,
+        status: string,
+        notes?: string | null,
+        user_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
@@ -2180,59 +2826,43 @@ export type OnUpdateUserSubscription = {
     id_number: string,
     cell_phone_no: string,
     access_type: string,
-    notification?:  {
-      __typename: "ModelNotificationConnection",
-      items:  Array< {
-        __typename: "Notification",
-        id: string,
-        message: string,
-        user_id: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
-    medicalReport?:  {
-      __typename: "ModelMedicalReportConnection",
-      items:  Array< {
-        __typename: "MedicalReport",
-        id: string,
-        report_text?: string | null,
-        doctor_name?: string | null,
-        appointment_date?: string | null,
-        medical_report_status: string,
-        user_id: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
-    biometricData?:  {
+    biometricdata?:  {
       __typename: "ModelBiometricDataConnection",
       items:  Array< {
         __typename: "BiometricData",
         id: string,
         data: string,
         status: string,
-        user_id: string,
+        user_id?: string | null,
         createdAt: string,
         updatedAt: string,
       } | null >,
       nextToken?: string | null,
     } | null,
-    governmentGrant?:  {
-      __typename: "GovernmentGrant",
-      id: string,
-      grantName: string,
-      description?: string | null,
-      amount?: number | null,
-      startDate?: string | null,
-      endDate?: string | null,
-      applicationDeadline?: string | null,
-      eligibilityRequirements?: Array< string | null > | null,
-      applicationProcess?: string | null,
-      createdAt: string,
-      updatedAt: string,
+    patient?:  {
+      __typename: "ModelPatientConnection",
+      items:  Array< {
+        __typename: "Patient",
+        id: string,
+        user_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    appointment?:  {
+      __typename: "ModelAppointmentConnection",
+      items:  Array< {
+        __typename: "Appointment",
+        id: string,
+        appointmentDate: string,
+        status: string,
+        notes?: string | null,
+        user_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
@@ -2256,105 +2886,44 @@ export type OnDeleteUserSubscription = {
     id_number: string,
     cell_phone_no: string,
     access_type: string,
-    notification?:  {
-      __typename: "ModelNotificationConnection",
-      items:  Array< {
-        __typename: "Notification",
-        id: string,
-        message: string,
-        user_id: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
-    medicalReport?:  {
-      __typename: "ModelMedicalReportConnection",
-      items:  Array< {
-        __typename: "MedicalReport",
-        id: string,
-        report_text?: string | null,
-        doctor_name?: string | null,
-        appointment_date?: string | null,
-        medical_report_status: string,
-        user_id: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
-    biometricData?:  {
+    biometricdata?:  {
       __typename: "ModelBiometricDataConnection",
       items:  Array< {
         __typename: "BiometricData",
         id: string,
         data: string,
         status: string,
-        user_id: string,
+        user_id?: string | null,
         createdAt: string,
         updatedAt: string,
       } | null >,
       nextToken?: string | null,
     } | null,
-    governmentGrant?:  {
-      __typename: "GovernmentGrant",
-      id: string,
-      grantName: string,
-      description?: string | null,
-      amount?: number | null,
-      startDate?: string | null,
-      endDate?: string | null,
-      applicationDeadline?: string | null,
-      eligibilityRequirements?: Array< string | null > | null,
-      applicationProcess?: string | null,
-      createdAt: string,
-      updatedAt: string,
+    patient?:  {
+      __typename: "ModelPatientConnection",
+      items:  Array< {
+        __typename: "Patient",
+        id: string,
+        user_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
     } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnCreateNotificationSubscriptionVariables = {
-  filter?: ModelSubscriptionNotificationFilterInput | null,
-};
-
-export type OnCreateNotificationSubscription = {
-  onCreateNotification?:  {
-    __typename: "Notification",
-    id: string,
-    message: string,
-    user_id: string,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnUpdateNotificationSubscriptionVariables = {
-  filter?: ModelSubscriptionNotificationFilterInput | null,
-};
-
-export type OnUpdateNotificationSubscription = {
-  onUpdateNotification?:  {
-    __typename: "Notification",
-    id: string,
-    message: string,
-    user_id: string,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnDeleteNotificationSubscriptionVariables = {
-  filter?: ModelSubscriptionNotificationFilterInput | null,
-};
-
-export type OnDeleteNotificationSubscription = {
-  onDeleteNotification?:  {
-    __typename: "Notification",
-    id: string,
-    message: string,
-    user_id: string,
+    appointment?:  {
+      __typename: "ModelAppointmentConnection",
+      items:  Array< {
+        __typename: "Appointment",
+        id: string,
+        appointmentDate: string,
+        status: string,
+        notes?: string | null,
+        user_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2370,7 +2939,7 @@ export type OnCreateBiometricDataSubscription = {
     id: string,
     data: string,
     status: string,
-    user_id: string,
+    user_id?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2386,7 +2955,7 @@ export type OnUpdateBiometricDataSubscription = {
     id: string,
     data: string,
     status: string,
-    user_id: string,
+    user_id?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2402,34 +2971,206 @@ export type OnDeleteBiometricDataSubscription = {
     id: string,
     data: string,
     status: string,
-    user_id: string,
+    user_id?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type OnCreateMedicalReportSubscriptionVariables = {
-  filter?: ModelSubscriptionMedicalReportFilterInput | null,
+export type OnCreateAppointmentSubscriptionVariables = {
+  filter?: ModelSubscriptionAppointmentFilterInput | null,
 };
 
-export type OnCreateMedicalReportSubscription = {
-  onCreateMedicalReport?:  {
-    __typename: "MedicalReport",
+export type OnCreateAppointmentSubscription = {
+  onCreateAppointment?:  {
+    __typename: "Appointment",
     id: string,
-    report_text?: string | null,
-    doctor_name?: string | null,
-    appointment_date?: string | null,
+    appointmentDate: string,
+    status: string,
+    notes?: string | null,
+    user_id?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateAppointmentSubscriptionVariables = {
+  filter?: ModelSubscriptionAppointmentFilterInput | null,
+};
+
+export type OnUpdateAppointmentSubscription = {
+  onUpdateAppointment?:  {
+    __typename: "Appointment",
+    id: string,
+    appointmentDate: string,
+    status: string,
+    notes?: string | null,
+    user_id?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteAppointmentSubscriptionVariables = {
+  filter?: ModelSubscriptionAppointmentFilterInput | null,
+};
+
+export type OnDeleteAppointmentSubscription = {
+  onDeleteAppointment?:  {
+    __typename: "Appointment",
+    id: string,
+    appointmentDate: string,
+    status: string,
+    notes?: string | null,
+    user_id?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnCreateAdminSubscriptionVariables = {
+  filter?: ModelSubscriptionAdminFilterInput | null,
+};
+
+export type OnCreateAdminSubscription = {
+  onCreateAdmin?:  {
+    __typename: "Admin",
+    id: string,
+    name: string,
+    surname: string,
+    email: string,
+    password: string,
+    access_type?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateAdminSubscriptionVariables = {
+  filter?: ModelSubscriptionAdminFilterInput | null,
+};
+
+export type OnUpdateAdminSubscription = {
+  onUpdateAdmin?:  {
+    __typename: "Admin",
+    id: string,
+    name: string,
+    surname: string,
+    email: string,
+    password: string,
+    access_type?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteAdminSubscriptionVariables = {
+  filter?: ModelSubscriptionAdminFilterInput | null,
+};
+
+export type OnDeleteAdminSubscription = {
+  onDeleteAdmin?:  {
+    __typename: "Admin",
+    id: string,
+    name: string,
+    surname: string,
+    email: string,
+    password: string,
+    access_type?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnCreateMedicalRecordsSubscriptionVariables = {
+  filter?: ModelSubscriptionMedicalRecordsFilterInput | null,
+};
+
+export type OnCreateMedicalRecordsSubscription = {
+  onCreateMedicalRecords?:  {
+    __typename: "MedicalRecords",
+    id: string,
+    report_text: string,
+    doctor_name: string,
+    appointment_date: string,
     medical_report_status: string,
-    user_id: string,
-    hospital?:  {
-      __typename: "ModelHospitalConnection",
+    patient_id?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateMedicalRecordsSubscriptionVariables = {
+  filter?: ModelSubscriptionMedicalRecordsFilterInput | null,
+};
+
+export type OnUpdateMedicalRecordsSubscription = {
+  onUpdateMedicalRecords?:  {
+    __typename: "MedicalRecords",
+    id: string,
+    report_text: string,
+    doctor_name: string,
+    appointment_date: string,
+    medical_report_status: string,
+    patient_id?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteMedicalRecordsSubscriptionVariables = {
+  filter?: ModelSubscriptionMedicalRecordsFilterInput | null,
+};
+
+export type OnDeleteMedicalRecordsSubscription = {
+  onDeleteMedicalRecords?:  {
+    __typename: "MedicalRecords",
+    id: string,
+    report_text: string,
+    doctor_name: string,
+    appointment_date: string,
+    medical_report_status: string,
+    patient_id?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnCreatePatientSubscriptionVariables = {
+  filter?: ModelSubscriptionPatientFilterInput | null,
+};
+
+export type OnCreatePatientSubscription = {
+  onCreatePatient?:  {
+    __typename: "Patient",
+    id: string,
+    user_id?: string | null,
+    prescription?:  {
+      __typename: "ModelPrescriptionConnection",
       items:  Array< {
-        __typename: "Hospital",
+        __typename: "Prescription",
         id: string,
-        hospital_name: string,
-        address: string,
-        postal_code: string,
-        medical_report_id: string,
+        patient_name: string,
+        medication_name: string,
+        dosage: string,
+        doctor_name: string,
+        patient_id?: string | null,
+        medical_doctor_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    medicalRecords?:  {
+      __typename: "ModelMedicalRecordsConnection",
+      items:  Array< {
+        __typename: "MedicalRecords",
+        id: string,
+        report_text: string,
+        doctor_name: string,
+        appointment_date: string,
+        medical_report_status: string,
+        patient_id?: string | null,
         createdAt: string,
         updatedAt: string,
       } | null >,
@@ -2440,28 +3181,41 @@ export type OnCreateMedicalReportSubscription = {
   } | null,
 };
 
-export type OnUpdateMedicalReportSubscriptionVariables = {
-  filter?: ModelSubscriptionMedicalReportFilterInput | null,
+export type OnUpdatePatientSubscriptionVariables = {
+  filter?: ModelSubscriptionPatientFilterInput | null,
 };
 
-export type OnUpdateMedicalReportSubscription = {
-  onUpdateMedicalReport?:  {
-    __typename: "MedicalReport",
+export type OnUpdatePatientSubscription = {
+  onUpdatePatient?:  {
+    __typename: "Patient",
     id: string,
-    report_text?: string | null,
-    doctor_name?: string | null,
-    appointment_date?: string | null,
-    medical_report_status: string,
-    user_id: string,
-    hospital?:  {
-      __typename: "ModelHospitalConnection",
+    user_id?: string | null,
+    prescription?:  {
+      __typename: "ModelPrescriptionConnection",
       items:  Array< {
-        __typename: "Hospital",
+        __typename: "Prescription",
         id: string,
-        hospital_name: string,
-        address: string,
-        postal_code: string,
-        medical_report_id: string,
+        patient_name: string,
+        medication_name: string,
+        dosage: string,
+        doctor_name: string,
+        patient_id?: string | null,
+        medical_doctor_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    medicalRecords?:  {
+      __typename: "ModelMedicalRecordsConnection",
+      items:  Array< {
+        __typename: "MedicalRecords",
+        id: string,
+        report_text: string,
+        doctor_name: string,
+        appointment_date: string,
+        medical_report_status: string,
+        patient_id?: string | null,
         createdAt: string,
         updatedAt: string,
       } | null >,
@@ -2472,87 +3226,46 @@ export type OnUpdateMedicalReportSubscription = {
   } | null,
 };
 
-export type OnDeleteMedicalReportSubscriptionVariables = {
-  filter?: ModelSubscriptionMedicalReportFilterInput | null,
+export type OnDeletePatientSubscriptionVariables = {
+  filter?: ModelSubscriptionPatientFilterInput | null,
 };
 
-export type OnDeleteMedicalReportSubscription = {
-  onDeleteMedicalReport?:  {
-    __typename: "MedicalReport",
+export type OnDeletePatientSubscription = {
+  onDeletePatient?:  {
+    __typename: "Patient",
     id: string,
-    report_text?: string | null,
-    doctor_name?: string | null,
-    appointment_date?: string | null,
-    medical_report_status: string,
-    user_id: string,
-    hospital?:  {
-      __typename: "ModelHospitalConnection",
+    user_id?: string | null,
+    prescription?:  {
+      __typename: "ModelPrescriptionConnection",
       items:  Array< {
-        __typename: "Hospital",
+        __typename: "Prescription",
         id: string,
-        hospital_name: string,
-        address: string,
-        postal_code: string,
-        medical_report_id: string,
+        patient_name: string,
+        medication_name: string,
+        dosage: string,
+        doctor_name: string,
+        patient_id?: string | null,
+        medical_doctor_id?: string | null,
         createdAt: string,
         updatedAt: string,
       } | null >,
       nextToken?: string | null,
     } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnCreateMedicalHistorySubscriptionVariables = {
-  filter?: ModelSubscriptionMedicalHistoryFilterInput | null,
-};
-
-export type OnCreateMedicalHistorySubscription = {
-  onCreateMedicalHistory?:  {
-    __typename: "MedicalHistory",
-    id: string,
-    condition?: string | null,
-    allergies?: string | null,
-    surgeries?: string | null,
-    medications?: string | null,
-    user_id: string,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnUpdateMedicalHistorySubscriptionVariables = {
-  filter?: ModelSubscriptionMedicalHistoryFilterInput | null,
-};
-
-export type OnUpdateMedicalHistorySubscription = {
-  onUpdateMedicalHistory?:  {
-    __typename: "MedicalHistory",
-    id: string,
-    condition?: string | null,
-    allergies?: string | null,
-    surgeries?: string | null,
-    medications?: string | null,
-    user_id: string,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnDeleteMedicalHistorySubscriptionVariables = {
-  filter?: ModelSubscriptionMedicalHistoryFilterInput | null,
-};
-
-export type OnDeleteMedicalHistorySubscription = {
-  onDeleteMedicalHistory?:  {
-    __typename: "MedicalHistory",
-    id: string,
-    condition?: string | null,
-    allergies?: string | null,
-    surgeries?: string | null,
-    medications?: string | null,
-    user_id: string,
+    medicalRecords?:  {
+      __typename: "ModelMedicalRecordsConnection",
+      items:  Array< {
+        __typename: "MedicalRecords",
+        id: string,
+        report_text: string,
+        doctor_name: string,
+        appointment_date: string,
+        medical_report_status: string,
+        patient_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -2569,17 +3282,47 @@ export type OnCreateHospitalSubscription = {
     hospital_name: string,
     address: string,
     postal_code: string,
-    medical_report_id: string,
-    doctor?:  {
-      __typename: "ModelDoctorConnection",
+    medicalDoctor?:  {
+      __typename: "ModelMedicalDoctorConnection",
       items:  Array< {
-        __typename: "Doctor",
+        __typename: "MedicalDoctor",
         id: string,
-        first_name?: string | null,
-        last_name?: string | null,
-        specialization?: string | null,
-        cell_no?: string | null,
-        hospital_id: string,
+        first_name: string,
+        last_name: string,
+        specialization: string,
+        email: string,
+        password: string,
+        phone: string,
+        access_type?: string | null,
+        hospital_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    departmentOfHomeAffairs?:  {
+      __typename: "ModelDepartmentOfHomeAffairsConnection",
+      items:  Array< {
+        __typename: "DepartmentOfHomeAffairs",
+        hospital_id?: string | null,
+        name: string,
+        surname: string,
+        address: string,
+        postal_code: string,
+        id_number: string,
+        cell_phone_no?: string | null,
+        race: string,
+        date_of_birth?: string | null,
+        gender?: string | null,
+        nationality?: string | null,
+        email?: string | null,
+        marital_status?: string | null,
+        citizenship_status?: string | null,
+        photo_url?: string | null,
+        notes?: string | null,
+        emergency_contact_name?: string | null,
+        emergency_contact_phone?: string | null,
+        id: string,
         createdAt: string,
         updatedAt: string,
       } | null >,
@@ -2601,17 +3344,47 @@ export type OnUpdateHospitalSubscription = {
     hospital_name: string,
     address: string,
     postal_code: string,
-    medical_report_id: string,
-    doctor?:  {
-      __typename: "ModelDoctorConnection",
+    medicalDoctor?:  {
+      __typename: "ModelMedicalDoctorConnection",
       items:  Array< {
-        __typename: "Doctor",
+        __typename: "MedicalDoctor",
         id: string,
-        first_name?: string | null,
-        last_name?: string | null,
-        specialization?: string | null,
-        cell_no?: string | null,
-        hospital_id: string,
+        first_name: string,
+        last_name: string,
+        specialization: string,
+        email: string,
+        password: string,
+        phone: string,
+        access_type?: string | null,
+        hospital_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    departmentOfHomeAffairs?:  {
+      __typename: "ModelDepartmentOfHomeAffairsConnection",
+      items:  Array< {
+        __typename: "DepartmentOfHomeAffairs",
+        hospital_id?: string | null,
+        name: string,
+        surname: string,
+        address: string,
+        postal_code: string,
+        id_number: string,
+        cell_phone_no?: string | null,
+        race: string,
+        date_of_birth?: string | null,
+        gender?: string | null,
+        nationality?: string | null,
+        email?: string | null,
+        marital_status?: string | null,
+        citizenship_status?: string | null,
+        photo_url?: string | null,
+        notes?: string | null,
+        emergency_contact_name?: string | null,
+        emergency_contact_phone?: string | null,
+        id: string,
         createdAt: string,
         updatedAt: string,
       } | null >,
@@ -2633,17 +3406,47 @@ export type OnDeleteHospitalSubscription = {
     hospital_name: string,
     address: string,
     postal_code: string,
-    medical_report_id: string,
-    doctor?:  {
-      __typename: "ModelDoctorConnection",
+    medicalDoctor?:  {
+      __typename: "ModelMedicalDoctorConnection",
       items:  Array< {
-        __typename: "Doctor",
+        __typename: "MedicalDoctor",
         id: string,
-        first_name?: string | null,
-        last_name?: string | null,
-        specialization?: string | null,
-        cell_no?: string | null,
-        hospital_id: string,
+        first_name: string,
+        last_name: string,
+        specialization: string,
+        email: string,
+        password: string,
+        phone: string,
+        access_type?: string | null,
+        hospital_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    departmentOfHomeAffairs?:  {
+      __typename: "ModelDepartmentOfHomeAffairsConnection",
+      items:  Array< {
+        __typename: "DepartmentOfHomeAffairs",
+        hospital_id?: string | null,
+        name: string,
+        surname: string,
+        address: string,
+        postal_code: string,
+        id_number: string,
+        cell_phone_no?: string | null,
+        race: string,
+        date_of_birth?: string | null,
+        gender?: string | null,
+        nationality?: string | null,
+        email?: string | null,
+        marital_status?: string | null,
+        citizenship_status?: string | null,
+        photo_url?: string | null,
+        notes?: string | null,
+        emergency_contact_name?: string | null,
+        emergency_contact_phone?: string | null,
+        id: string,
         createdAt: string,
         updatedAt: string,
       } | null >,
@@ -2654,133 +3457,262 @@ export type OnDeleteHospitalSubscription = {
   } | null,
 };
 
-export type OnCreateDoctorSubscriptionVariables = {
-  filter?: ModelSubscriptionDoctorFilterInput | null,
+export type OnCreatePrescriptionSubscriptionVariables = {
+  filter?: ModelSubscriptionPrescriptionFilterInput | null,
 };
 
-export type OnCreateDoctorSubscription = {
-  onCreateDoctor?:  {
-    __typename: "Doctor",
+export type OnCreatePrescriptionSubscription = {
+  onCreatePrescription?:  {
+    __typename: "Prescription",
     id: string,
-    first_name?: string | null,
-    last_name?: string | null,
-    specialization?: string | null,
-    contactInformation?:  {
-      __typename: "ContactInfo",
-      email?: string | null,
-      phone?: string | null,
+    patient_name: string,
+    medication_name: string,
+    dosage: string,
+    doctor_name: string,
+    patient_id?: string | null,
+    medical_doctor_id?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdatePrescriptionSubscriptionVariables = {
+  filter?: ModelSubscriptionPrescriptionFilterInput | null,
+};
+
+export type OnUpdatePrescriptionSubscription = {
+  onUpdatePrescription?:  {
+    __typename: "Prescription",
+    id: string,
+    patient_name: string,
+    medication_name: string,
+    dosage: string,
+    doctor_name: string,
+    patient_id?: string | null,
+    medical_doctor_id?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeletePrescriptionSubscriptionVariables = {
+  filter?: ModelSubscriptionPrescriptionFilterInput | null,
+};
+
+export type OnDeletePrescriptionSubscription = {
+  onDeletePrescription?:  {
+    __typename: "Prescription",
+    id: string,
+    patient_name: string,
+    medication_name: string,
+    dosage: string,
+    doctor_name: string,
+    patient_id?: string | null,
+    medical_doctor_id?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnCreateMedicalDoctorSubscriptionVariables = {
+  filter?: ModelSubscriptionMedicalDoctorFilterInput | null,
+};
+
+export type OnCreateMedicalDoctorSubscription = {
+  onCreateMedicalDoctor?:  {
+    __typename: "MedicalDoctor",
+    id: string,
+    first_name: string,
+    last_name: string,
+    specialization: string,
+    email: string,
+    password: string,
+    phone: string,
+    access_type?: string | null,
+    hospital_id?: string | null,
+    prescription?:  {
+      __typename: "ModelPrescriptionConnection",
+      items:  Array< {
+        __typename: "Prescription",
+        id: string,
+        patient_name: string,
+        medication_name: string,
+        dosage: string,
+        doctor_name: string,
+        patient_id?: string | null,
+        medical_doctor_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
     } | null,
-    cell_no?: string | null,
-    hospital_id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type OnUpdateDoctorSubscriptionVariables = {
-  filter?: ModelSubscriptionDoctorFilterInput | null,
+export type OnUpdateMedicalDoctorSubscriptionVariables = {
+  filter?: ModelSubscriptionMedicalDoctorFilterInput | null,
 };
 
-export type OnUpdateDoctorSubscription = {
-  onUpdateDoctor?:  {
-    __typename: "Doctor",
+export type OnUpdateMedicalDoctorSubscription = {
+  onUpdateMedicalDoctor?:  {
+    __typename: "MedicalDoctor",
     id: string,
-    first_name?: string | null,
-    last_name?: string | null,
-    specialization?: string | null,
-    contactInformation?:  {
-      __typename: "ContactInfo",
-      email?: string | null,
-      phone?: string | null,
+    first_name: string,
+    last_name: string,
+    specialization: string,
+    email: string,
+    password: string,
+    phone: string,
+    access_type?: string | null,
+    hospital_id?: string | null,
+    prescription?:  {
+      __typename: "ModelPrescriptionConnection",
+      items:  Array< {
+        __typename: "Prescription",
+        id: string,
+        patient_name: string,
+        medication_name: string,
+        dosage: string,
+        doctor_name: string,
+        patient_id?: string | null,
+        medical_doctor_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
     } | null,
-    cell_no?: string | null,
-    hospital_id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type OnDeleteDoctorSubscriptionVariables = {
-  filter?: ModelSubscriptionDoctorFilterInput | null,
+export type OnDeleteMedicalDoctorSubscriptionVariables = {
+  filter?: ModelSubscriptionMedicalDoctorFilterInput | null,
 };
 
-export type OnDeleteDoctorSubscription = {
-  onDeleteDoctor?:  {
-    __typename: "Doctor",
+export type OnDeleteMedicalDoctorSubscription = {
+  onDeleteMedicalDoctor?:  {
+    __typename: "MedicalDoctor",
     id: string,
-    first_name?: string | null,
-    last_name?: string | null,
-    specialization?: string | null,
-    contactInformation?:  {
-      __typename: "ContactInfo",
-      email?: string | null,
-      phone?: string | null,
+    first_name: string,
+    last_name: string,
+    specialization: string,
+    email: string,
+    password: string,
+    phone: string,
+    access_type?: string | null,
+    hospital_id?: string | null,
+    prescription?:  {
+      __typename: "ModelPrescriptionConnection",
+      items:  Array< {
+        __typename: "Prescription",
+        id: string,
+        patient_name: string,
+        medication_name: string,
+        dosage: string,
+        doctor_name: string,
+        patient_id?: string | null,
+        medical_doctor_id?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
     } | null,
-    cell_no?: string | null,
-    hospital_id: string,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type OnCreateGovernmentGrantSubscriptionVariables = {
-  filter?: ModelSubscriptionGovernmentGrantFilterInput | null,
+export type OnCreateDepartmentOfHomeAffairsSubscriptionVariables = {
+  filter?: ModelSubscriptionDepartmentOfHomeAffairsFilterInput | null,
 };
 
-export type OnCreateGovernmentGrantSubscription = {
-  onCreateGovernmentGrant?:  {
-    __typename: "GovernmentGrant",
+export type OnCreateDepartmentOfHomeAffairsSubscription = {
+  onCreateDepartmentOfHomeAffairs?:  {
+    __typename: "DepartmentOfHomeAffairs",
+    hospital_id?: string | null,
+    name: string,
+    surname: string,
+    address: string,
+    postal_code: string,
+    id_number: string,
+    cell_phone_no?: string | null,
+    race: string,
+    date_of_birth?: string | null,
+    gender?: string | null,
+    nationality?: string | null,
+    email?: string | null,
+    marital_status?: string | null,
+    citizenship_status?: string | null,
+    photo_url?: string | null,
+    notes?: string | null,
+    emergency_contact_name?: string | null,
+    emergency_contact_phone?: string | null,
     id: string,
-    grantName: string,
-    description?: string | null,
-    amount?: number | null,
-    startDate?: string | null,
-    endDate?: string | null,
-    applicationDeadline?: string | null,
-    eligibilityRequirements?: Array< string | null > | null,
-    applicationProcess?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type OnUpdateGovernmentGrantSubscriptionVariables = {
-  filter?: ModelSubscriptionGovernmentGrantFilterInput | null,
+export type OnUpdateDepartmentOfHomeAffairsSubscriptionVariables = {
+  filter?: ModelSubscriptionDepartmentOfHomeAffairsFilterInput | null,
 };
 
-export type OnUpdateGovernmentGrantSubscription = {
-  onUpdateGovernmentGrant?:  {
-    __typename: "GovernmentGrant",
+export type OnUpdateDepartmentOfHomeAffairsSubscription = {
+  onUpdateDepartmentOfHomeAffairs?:  {
+    __typename: "DepartmentOfHomeAffairs",
+    hospital_id?: string | null,
+    name: string,
+    surname: string,
+    address: string,
+    postal_code: string,
+    id_number: string,
+    cell_phone_no?: string | null,
+    race: string,
+    date_of_birth?: string | null,
+    gender?: string | null,
+    nationality?: string | null,
+    email?: string | null,
+    marital_status?: string | null,
+    citizenship_status?: string | null,
+    photo_url?: string | null,
+    notes?: string | null,
+    emergency_contact_name?: string | null,
+    emergency_contact_phone?: string | null,
     id: string,
-    grantName: string,
-    description?: string | null,
-    amount?: number | null,
-    startDate?: string | null,
-    endDate?: string | null,
-    applicationDeadline?: string | null,
-    eligibilityRequirements?: Array< string | null > | null,
-    applicationProcess?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type OnDeleteGovernmentGrantSubscriptionVariables = {
-  filter?: ModelSubscriptionGovernmentGrantFilterInput | null,
+export type OnDeleteDepartmentOfHomeAffairsSubscriptionVariables = {
+  filter?: ModelSubscriptionDepartmentOfHomeAffairsFilterInput | null,
 };
 
-export type OnDeleteGovernmentGrantSubscription = {
-  onDeleteGovernmentGrant?:  {
-    __typename: "GovernmentGrant",
+export type OnDeleteDepartmentOfHomeAffairsSubscription = {
+  onDeleteDepartmentOfHomeAffairs?:  {
+    __typename: "DepartmentOfHomeAffairs",
+    hospital_id?: string | null,
+    name: string,
+    surname: string,
+    address: string,
+    postal_code: string,
+    id_number: string,
+    cell_phone_no?: string | null,
+    race: string,
+    date_of_birth?: string | null,
+    gender?: string | null,
+    nationality?: string | null,
+    email?: string | null,
+    marital_status?: string | null,
+    citizenship_status?: string | null,
+    photo_url?: string | null,
+    notes?: string | null,
+    emergency_contact_name?: string | null,
+    emergency_contact_phone?: string | null,
     id: string,
-    grantName: string,
-    description?: string | null,
-    amount?: number | null,
-    startDate?: string | null,
-    endDate?: string | null,
-    applicationDeadline?: string | null,
-    eligibilityRequirements?: Array< string | null > | null,
-    applicationProcess?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,

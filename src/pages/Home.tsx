@@ -10,35 +10,42 @@ import ExploreContainer from "../components/ExploreContainer";
 import "./Home.css";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
+import { useContext } from "react";
+import LoginData from "../context/login";
+import { AiFillDashboard } from "react-icons/ai";
 
 const Home: React.FC = () => {
+  const { loginUser, setLoginUser }: any = useContext(LoginData);
+
   return (
     <IonPage>
       <IonContent fullscreen>
         {/* Neviagtion section */}
         <Nav />
-
-        {/* Main section */}
-        <section className="main-section text-center">
-          <div className="sub-m">
-            <IonTitle color="success">
-              <h3 className="main-title text-center">Welcome to our smart</h3>
-            </IonTitle>
-            <h3 className="main-title-sub text-light text-center">
-              health care system
-            </h3>
-            <IonButton
-              className="btn-register"
-              fill="outline"
-              shape="round"
-              color="success"
-              routerLink="/Registration"
-            >
-              Register now
-            </IonButton>
-          </div>
-        </section>
-
+          <>
+            {/* Main section */}
+            <section className="main-section text-center">
+              <div className="sub-m">
+                <IonTitle color="success">
+                  <h3 className="main-title text-center">
+                    Welcome to our smart
+                  </h3>
+                </IonTitle>
+                <h3 className="main-title-sub text-light text-center">
+                  health care system
+                </h3>
+                <IonButton
+                  className="btn-register"
+                  fill="outline"
+                  shape="round"
+                  color="success"
+                  routerLink="/Registration"
+                >
+                  Register now
+                </IonButton>
+              </div>
+            </section>
+          </>
         <section className="about-section text-center bg-light">
           <div className="row">
             <div className="col-sm-6">
